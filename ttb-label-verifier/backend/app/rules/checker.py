@@ -1,16 +1,13 @@
-'''
-    Checks exact text, exact capitalized casing for the warning, and fuzzy string matching 
-    (via rapidfuzz) for brand names.
-'''
-
+import re
 from rapidfuzz import fuzz
 
-"""
-    Evaluates OCR-extracted text against expected COLA application metadata.
-"""
 def verify_label_compliance(ocr_text_list: list, manifest_data: dict) -> dict:
-
-    extracted_text_block = " ".join(ocr_text_list)
+    """
+    Evaluates OCR-extracted text against expected COLA application metadata.
+    """
+    raw_text_block = " ".join(ocr_text_list)
+    clean_text_block = re.sub(r'\s+', ' ', raw_text_block)
+    
     results = {
         "status": "PASS",
         "flags": [],
@@ -18,10 +15,14 @@ def verify_label_compliance(ocr_text_list: list, manifest_data: dict) -> dict:
     }
 
     # -----------------------------------------------------------------------
-    # Rule 1: Government Warning Casing & Exact Presence Check
+    # Rule 1: Government Warning Casing & Presence Check
     # -----------------------------------------------------------------------
-    if "GOVERNMENT WARNING:" not in extracted_text_block:
-        if "government warning:" in extracted_text_block.lower():
+    # Flexible regex matches "GOVERNMENT WARNING" even if OCR misses the colon
+    has_exact_cap_header = bool(re.search(r'GOVERNMENT\s*WARNING:?', clean_text_block))
+    has_lower_cap_header = bool(re.search(r'government\s*warning:?', clean_text_block, re.IGNORECASE))
+
+    if not has_exact_cap_header:
+        if has_lower_cap_header:
             results["flags"].append({
                 "rule": "WARNING_CASING",
                 "severity": "FAIL",
@@ -37,15 +38,24 @@ def verify_label_compliance(ocr_text_list: list, manifest_data: dict) -> dict:
             results["status"] = "FAIL_MISSING_WARNING"
 
     # -----------------------------------------------------------------------
-    # Rule 2: Brand Name Match (Exact & Fuzzy Casing Handling)
+    # Rule 2: Brand Name Match (Exact & Fuzzy Handling)
     # -----------------------------------------------------------------------
     expected_brand = manifest_data.get("brand_name", "")
-    brand_found = any(expected_brand.lower() in text.lower() for text in ocr_text_list)
     
-    if brand_found:
-        # Check if casing matches exactly
-        exact_casing_match = any(expected_brand in text for text in ocr_text_list)
-        if not exact_casing_match and results["status"] == "PASS":
+    best_exact_casing_score = 0
+    best_case_insensitive_score = 0
+    
+    for text in ocr_text_list:
+        exact_score = fuzz.ratio(expected_brand, text)
+        if exact_score > best_exact_casing_score:
+            best_exact_casing_score = exact_score
+            
+        ci_score = fuzz.ratio(expected_brand.lower(), text.lower())
+        if ci_score > best_case_insensitive_score:
+            best_case_insensitive_score = ci_score
+
+    if best_case_insensitive_score >= 75 or any(expected_brand.lower() in text.lower() for text in ocr_text_list):
+        if best_exact_casing_score < 90 and results["status"] == "PASS":
             results["flags"].append({
                 "rule": "BRAND_CASING_VARIANCE",
                 "severity": "NEEDS_REVIEW",
@@ -58,7 +68,8 @@ def verify_label_compliance(ocr_text_list: list, manifest_data: dict) -> dict:
             "severity": "FAIL",
             "message": f"Expected brand name '{expected_brand}' not found on label artwork."
         })
-        results["status"] = "FAIL_BRAND_MISMATCH"
+        if results["status"] == "PASS":
+            results["status"] = "FAIL_BRAND_MISMATCH"
 
     # -----------------------------------------------------------------------
     # Rule 3: Alcohol By Volume (ABV) Match

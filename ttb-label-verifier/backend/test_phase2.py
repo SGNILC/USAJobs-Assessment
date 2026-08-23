@@ -1,7 +1,3 @@
-'''
-    Testing the verification of the label contents
-'''
-
 import os
 import json
 from app.core.preprocess import extract_text_from_image
@@ -26,16 +22,15 @@ def run_tests():
         with open(manifest_path, "r") as f:
             manifest_data = json.load(f)
 
-        # 1. OCR Extraction
         ocr_text = extract_text_from_image(image_bytes)
-        
-        # 2. Rule Evaluation
         result = verify_label_compliance(ocr_text, manifest_data)
         
-        # 3. Output comparison
         passed = result["status"] == test["expected_status"]
         status_icon = "✅" if passed else "❌"
+        
         print(f"{status_icon} ID: {test['id']} | Result: {result['status']} | Expected: {test['expected_status']}")
+        if not passed:
+            print(f"   └─ Extracted OCR: {ocr_text}\n")
 
 if __name__ == "__main__":
     run_tests()
