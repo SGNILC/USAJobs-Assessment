@@ -9,9 +9,13 @@ def verify_label_compliance(ocr_text_list: list, manifest_data: dict) -> dict:
     clean_text_block = re.sub(r'\s+', ' ', raw_text_block)
     
     results = {
-        "status": "PASS",
+        "overall_status": "PASS",
         "flags": [],
-        "details": {}
+        "checks": {
+            "government_warning": {"status": "PASS"},
+            "brand_name": {"status": "PASS"},
+            "alcohol_by_volume": {"status": "PASS"}
+        }
     }
 
     # -----------------------------------------------------------------------
@@ -28,14 +32,16 @@ def verify_label_compliance(ocr_text_list: list, manifest_data: dict) -> dict:
                 "severity": "FAIL",
                 "message": "Government Warning header must be strictly in ALL CAPS."
             })
-            results["status"] = "FAIL_CASING"
+            results["overall_status"] = "FAIL_CASING"
+            results["checks"]["government_warning"]["status"] = "FAIL_CASING"
         else:
             results["flags"].append({
                 "rule": "WARNING_MISSING",
                 "severity": "FAIL",
                 "message": "Mandatory Government Warning statement is missing."
             })
-            results["status"] = "FAIL_MISSING_WARNING"
+            results["overall_status"] = "FAIL_MISSING_WARNING"
+            results["checks"]["government_warning"]["status"] = "FAIL_MISSING_WARNING"
 
     # -----------------------------------------------------------------------
     # Rule 2: Brand Name Match (Exact & Fuzzy Handling)
@@ -55,21 +61,23 @@ def verify_label_compliance(ocr_text_list: list, manifest_data: dict) -> dict:
             best_case_insensitive_score = ci_score
 
     if best_case_insensitive_score >= 75 or any(expected_brand.lower() in text.lower() for text in ocr_text_list):
-        if best_exact_casing_score < 90 and results["status"] == "PASS":
+        if best_exact_casing_score < 90 and results["overall_status"] == "PASS":
             results["flags"].append({
                 "rule": "BRAND_CASING_VARIANCE",
                 "severity": "NEEDS_REVIEW",
                 "message": f"Brand name match found but casing differs (Expected: '{expected_brand}')."
             })
-            results["status"] = "NEEDS_REVIEW_CASE"
+            results["overall_status"] = "NEEDS_REVIEW_CASE"
+            results["checks"]["brand_name"]["status"] = "NEEDS_REVIEW_CASE"
     else:
         results["flags"].append({
             "rule": "BRAND_MISMATCH",
             "severity": "FAIL",
             "message": f"Expected brand name '{expected_brand}' not found on label artwork."
         })
-        if results["status"] == "PASS":
-            results["status"] = "FAIL_BRAND_MISMATCH"
+        results["checks"]["brand_name"]["status"] = "FAIL_BRAND_MISMATCH"
+        if results["overall_status"] == "PASS":
+            results["overall_status"] = "FAIL_BRAND_MISMATCH"
 
     # -----------------------------------------------------------------------
     # Rule 3: Alcohol By Volume (ABV) Match
@@ -83,7 +91,8 @@ def verify_label_compliance(ocr_text_list: list, manifest_data: dict) -> dict:
             "severity": "FAIL",
             "message": f"Declared ABV '{expected_abv}%' does not match label text."
         })
-        if results["status"] == "PASS":
-            results["status"] = "FAIL_ABV_MISMATCH"
+        results["checks"]["alcohol_by_volume"]["status"] = "FAIL_ABV_MISMATCH"
+        if results["overall_status"] == "PASS":
+            results["overall_status"] = "FAIL_ABV_MISMATCH"
 
     return results

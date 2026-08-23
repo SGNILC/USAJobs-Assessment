@@ -19,7 +19,9 @@ def preprocess_image(image_bytes: bytes) -> np.ndarray:
 
     np_arr = np.frombuffer(image_bytes, np.uint8)
     image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
-    
+    if image is None:
+        raise ValueError("Could not decode image bytes; file may be corrupt or not a supported image format.")
+
     # Convert to Grayscale
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     
