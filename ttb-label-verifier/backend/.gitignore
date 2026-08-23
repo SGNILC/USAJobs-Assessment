@@ -1,0 +1,22 @@
+# Python / Virtual Environment
+venv/
+*.pyc
+__pycache__/
+*.pyo
+
+# Mac & OS System Files
+.DS_Store
+Thumbs.db
+
+# Node / React Frontend (Phase 3 scaffold)
+node_modules/
+.expo/
+dist/
+web-build/
+
+# IDE Settings
+.vscode/
+.idea/
+
+# Environment Variables & Secrets
+.env

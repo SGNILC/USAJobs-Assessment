@@ -1,0 +1,26 @@
+[
+  {
+    "id": "COLA-2026-001",
+    "expected_status": "PASS",
+    "image_file": "COLA-2026-001.png",
+    "manifest_file": "COLA-2026-001.json"
+  },
+  {
+    "id": "COLA-2026-002",
+    "expected_status": "FAIL_CASING",
+    "image_file": "COLA-2026-002.png",
+    "manifest_file": "COLA-2026-002.json"
+  },
+  {
+    "id": "COLA-2026-003",
+    "expected_status": "NEEDS_REVIEW_CASE",
+    "image_file": "COLA-2026-003.png",
+    "manifest_file": "COLA-2026-003.json"
+  },
+  {
+    "id": "COLA-2026-004",
+    "expected_status": "FAIL_ABV_MISMATCH",
+    "image_file": "COLA-2026-004.png",
+    "manifest_file": "COLA-2026-004.json"
+  }
+]
