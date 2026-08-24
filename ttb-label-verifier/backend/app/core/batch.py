@@ -23,11 +23,21 @@ def process_batch_zip(zip_bytes: bytes, job_id: str):
         manifest_file = [f for f in filenames if f.endswith("manifest.json") or f.endswith("manifests.json")]
         
         if not manifest_file:
+            # Job row must exist before updating it, or the status stays 404 forever
+            create_batch_job(job_id, 0)
             update_batch_progress(job_id, 0, 0, summary={"error": "Missing manifest.json in zip archive."})
             return
 
-        manifest_data = json.loads(z.read(manifest_file[0]))
-        manifest_map = {item["application_id"]: item for item in manifest_data}
+        try:
+            manifest_data = json.loads(z.read(manifest_file[0]))
+            manifest_map = {item["application_id"]: item for item in manifest_data}
+        except (json.JSONDecodeError, KeyError, TypeError) as exc:
+            create_batch_job(job_id, 0)
+            update_batch_progress(job_id, 0, 0, summary={
+                "error": f"manifest.json is malformed or missing 'application_id' fields: {exc}"
+            })
+            return
+
         image_files = [f for f in filenames if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
 
         create_batch_job(job_id, len(image_files))
