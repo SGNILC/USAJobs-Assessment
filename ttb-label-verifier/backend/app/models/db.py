@@ -31,6 +31,16 @@ def init_db():
             summary_json TEXT
         )
     """)
+
+    # Human agent Approve/Reject overrides captured from the Inspector Review UI
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS agent_decisions (
+            application_id TEXT PRIMARY KEY,
+            decision TEXT,
+            notes TEXT,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
     
     conn.commit()
     conn.close()
@@ -80,5 +90,40 @@ def get_batch_job(job_id: str):
             "processed_items": row[2],
             "status": row[3],
             "summary": json.loads(row[4]) if row[4] else {}
+        }
+    return None
+
+def save_decision(application_id: str, decision: str, notes: str = None):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute(
+        """
+        INSERT INTO agent_decisions (application_id, decision, notes, updated_at)
+        VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+        ON CONFLICT(application_id) DO UPDATE SET
+            decision = excluded.decision,
+            notes = excluded.notes,
+            updated_at = CURRENT_TIMESTAMP
+        """,
+        (application_id, decision, notes)
+    )
+    conn.commit()
+    conn.close()
+
+def get_decision(application_id: str):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT application_id, decision, notes, updated_at FROM agent_decisions WHERE application_id = ?",
+        (application_id,)
+    )
+    row = cursor.fetchone()
+    conn.close()
+    if row:
+        return {
+            "application_id": row[0],
+            "decision": row[1],
+            "notes": row[2],
+            "updated_at": row[3]
         }
     return None

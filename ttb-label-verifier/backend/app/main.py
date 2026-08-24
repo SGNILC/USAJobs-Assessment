@@ -4,9 +4,10 @@ import time
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTasks
 from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 from app.core.preprocess import extract_text_from_image
 from app.rules.checker import verify_label_compliance
-from app.models.db import init_db, log_verification, get_batch_job
+from app.models.db import init_db, log_verification, get_batch_job, save_decision, get_decision
 from app.core.batch import process_batch_zip, generate_batch_csv, executor
 
 app = FastAPI(
@@ -98,3 +99,24 @@ def export_batch_csv(job_id: str):
         media_type="text/csv",
         headers={"Content-Disposition": f"attachment; filename=ttb_batch_{job_id}_export.csv"}
     )
+
+
+class DecisionPayload(BaseModel):
+    decision: str
+    notes: str | None = None
+
+
+@app.post("/api/v1/verify/{application_id}/decision")
+def submit_decision(application_id: str, payload: DecisionPayload):
+    if payload.decision not in ("APPROVED", "REJECTED"):
+        raise HTTPException(status_code=400, detail="decision must be 'APPROVED' or 'REJECTED'.")
+    save_decision(application_id, payload.decision, payload.notes)
+    return {"application_id": application_id, "decision": payload.decision, "notes": payload.notes}
+
+
+@app.get("/api/v1/verify/{application_id}/decision")
+def read_decision(application_id: str):
+    decision = get_decision(application_id)
+    if not decision:
+        raise HTTPException(status_code=404, detail="No decision recorded for this application ID.")
+    return decision
