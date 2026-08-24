@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+/* 73-yo usability benchmark: 18pt+ base font, WCAG AAA contrast status colors */
+@theme {
+  --font-sans: "Segoe UI", system-ui, Roboto, sans-serif;
+
+  --color-status-pass-bg: #e6f4ea;
+  --color-status-pass-fg: #0b6b1f;
+  --color-status-pass-border: #1e8e3e;
+
+  --color-status-review-bg: #fff8e1;
+  --color-status-review-fg: #7a5b00;
+  --color-status-review-border: #b58900;
+
+  --color-status-fail-bg: #fdecea;
+  --color-status-fail-fg: #a30000;
+  --color-status-fail-border: #c5221f;
+}
+
+:root {
+  font: 18px/145% var(--font-sans);
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  color: #1a1a1a;
+  background: #ffffff;
+}
+
+#root {
+  min-height: 100svh;
+}
+

@@ -1,0 +1,16 @@
+[
+  {
+    "application_id": "COLA-2026-001",
+    "brand_name": "OLD TOM DISTILLERY",
+    "class_type": "Kentucky Straight Bourbon Whiskey",
+    "alcohol_by_volume": "45%",
+    "net_contents": "750 mL"
+  },
+  {
+    "application_id": "COLA-2026-002",
+    "brand_name": "BLUE RIDGE BREWING",
+    "class_type": "Craft IPA",
+    "alcohol_by_volume": "6.5%",
+    "net_contents": "12 fl oz"
+  }
+]

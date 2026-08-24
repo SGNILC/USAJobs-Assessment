@@ -10,9 +10,9 @@
 
 * ✅ Phase 2: Offline Vision, Image Preprocessing & Rule Verification Engine
 
-* 🚧 Phase 3: REST API Service & Asynchronous Batch Processing Manager
+* ✅ Phase 3: REST API Service & Asynchronous Batch Processing Manager
 
-* ⏳ Phase 4: High-Accessibility React Web Interface (73-Yo Benchmark)
+* ✅ Phase 4: High-Accessibility React Web Interface (73-Yo Benchmark)
 
 * ⏳ Phase 5: Automated Benchmarking, Final Testing & Deployment
 
@@ -144,7 +144,7 @@ The architecture leverages tools directly matching candidate experience while re
 
 ---
 
-### Phase 3: REST API Service & Asynchronous Batch Manager (P3)
+### Phase 3: REST API Service & Asynchronous Batch Manager (P3) ✅ COMPLETE
 
 * **Task 3.1: Single Application Endpoint (`POST /api/v1/verify/single`)**
   * Receives label image file + form meta. Executes Preprocess $\rightarrow$ OCR $\rightarrow$ Rules Engine.
@@ -159,9 +159,18 @@ The architecture leverages tools directly matching candidate experience while re
 * **Task 3.3: Storage & Audit Trail Layer**
   * Embedded SQLite database storing execution time metrics, confidence scores, and verification outcomes using parameterized queries.
 
+* **Implementation Notes (as-built):**
+  * Endpoints implemented in `backend/app/main.py`: `POST /api/v1/verify`, `POST /api/v1/verify/batch`, `GET /api/v1/batch/{job_id}`, `GET /api/v1/batch/{job_id}/export`, plus `GET /health`.
+  * Batch processing implemented in `backend/app/core/batch.py` using a `ThreadPoolExecutor`, with progress/summary tracked via `backend/app/models/db.py`.
+  * Integration test suite (`backend/test_phase3.py`) exercises health check, single verification, batch upload, job polling, and CSV export end-to-end via FastAPI's `TestClient` — all passing.
+  * Fixed defects found during integration testing:
+    * Removed a stray/conflicting third-party `app` package from the backend venv that shadowed the local `app` package.
+    * Hardened `preprocess.py` to raise a clear `ValueError` on undecodable image bytes instead of an opaque OpenCV assertion failure.
+    * Corrected `checker.py`'s output schema to use `overall_status` (previously `status`) and added a `checks` sub-dict (`government_warning`, `brand_name`, `alcohol_by_volume`) to match the schema consumed by `main.py`, `batch.py`, and the Phase 3 test suite.
+
 ---
 
-### Phase 4: High-Accessibility React Web Interface (P4)
+### Phase 4: High-Accessibility React Web Interface (P4) ✅ COMPLETE
 
 * **Task 4.1: Accessible Interface Engineering ("73-Year-Old Usability Benchmark")**
   * High-contrast design, large text sizes ($18\text{pt}+$ base font), and prominent action controls.
@@ -179,6 +188,16 @@ The architecture leverages tools directly matching candidate experience while re
   * Drag-and-drop `.zip` submission portal.
   * Real-time progress bar with live counter (e.g., "Processing Label 142 of 300").
   * Filterable batch data table (Filter by: All, Needs Review, Failed, Passed) with "Export Summary to CSV" button.
+
+* **Implementation Notes (as-built):**
+  * Scaffolded `frontend/` as a Vite + React + TypeScript app with Tailwind CSS v4 (`@tailwindcss/vite`) and `react-router-dom`.
+  * Theme tokens in `frontend/src/index.css` set an 18px base font and WCAG-AAA-oriented green/yellow/red status color tokens.
+  * `frontend/src/services/api.ts` + `types.ts` provide a typed client for `verifyLabel`, `submitBatch`, `getBatchJob`, `exportBatchCsv`, and `submitDecision`, reading the backend URL from `VITE_API_BASE_URL`.
+  * Added backend support for agent decisions: `agent_decisions` table in `backend/app/models/db.py`, plus `POST/GET /api/v1/verify/{application_id}/decision` in `backend/app/main.py`.
+  * Shared components: `StatusBadge`, `ChecklistRow`, `LatencyClock` (in `frontend/src/components/`), driven by a status-classification helper (`frontend/src/utils/status.ts`) that collapses granular rule codes into PASS/NEEDS_REVIEW/FAIL tiers.
+  * `/review` page: manifest form + image upload, side-by-side uploaded image vs. checklist, latency clock, and Approve/Reject buttons wired to the decision endpoint.
+  * `/batch` page: drag-and-drop `.zip` upload, polling progress bar, filterable results table, and CSV export download.
+  * Verified end-to-end against the running backend using real sample data (`sample_data/images/COLA-2026-001.png` + matching manifest) — OCR, rules engine, and decision persistence all confirmed working via direct API calls, and the frontend build (`npm run build`) and dev server both run cleanly.
 
 ---
 
