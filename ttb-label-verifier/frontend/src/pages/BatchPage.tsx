@@ -85,37 +85,16 @@ export default function BatchPage() {
     return variant === "fail";
   });
 
-  const progressPct = job && job.total_items > 0 ? Math.round((job.processed_items / job.total_items) * 100) : 0;
+  const progressPct =
+    job && job.total_items > 0 ? Math.round((job.processed_items / job.total_items) * 100) : 0;
 
   return (
-    <main className="mx-auto max-w-5xl px-6 py-10">
-      <h1 className="mb-8 text-3xl font-bold">Batch Queue</h1>
+    <main className="mx-auto max-w-7xl px-6 py-8 text-black">
+      <h1 className="mb-6 text-4xl font-black underline decoration-blue-700 decoration-4">
+        Batch Queue Processing
+      </h1>
 
-      {/* <div className="mb-8 rounded-xl border border-gray-200 bg-gray-50 p-6 text-lg">
-        <p className="mb-2 font-semibold">
-          Upload a <code className="rounded bg-gray-200 px-1">.zip</code> file containing your label images
-          (<code className="rounded bg-gray-200 px-1">.png</code>/<code className="rounded bg-gray-200 px-1">.jpg</code>)
-          and a file named exactly <code className="rounded bg-gray-200 px-1">manifest.json</code>.
-        </p>
-        <p className="mb-2">
-          <code className="rounded bg-gray-200 px-1">manifest.json</code> must be a JSON array with one object per
-          image, each including <code className="rounded bg-gray-200 px-1">application_id</code>,{" "}
-          <code className="rounded bg-gray-200 px-1">brand_name</code>,{" "}
-          <code className="rounded bg-gray-200 px-1">class_type</code>,{" "}
-          <code className="rounded bg-gray-200 px-1">alcohol_by_volume</code>, and{" "}
-          <code className="rounded bg-gray-200 px-1">net_contents</code>. The{" "}
-          <code className="rounded bg-gray-200 px-1">application_id</code> must match each image's filename
-          (without extension).
-        </p>
-        <a
-          href="/sample-manifest.json"
-          download
-          className="font-semibold text-blue-700 underline hover:text-blue-900"
-        >
-          Download sample manifest.json
-        </a>
-      </div> */}
-
+      {/* Drag & Drop Upload Portal */}
       <div
         onDragOver={(e) => {
           e.preventDefault();
@@ -123,13 +102,15 @@ export default function BatchPage() {
         }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
-        className={`mb-8 flex flex-col items-center justify-center rounded-xl border-4 border-dashed p-12 text-center text-xl ${
-          isDragging ? "border-blue-600 bg-blue-50" : "border-gray-300"
+        className={`mb-8 flex flex-col items-center justify-center rounded-3xl border-4 border-dashed p-12 text-center shadow-lg transition-colors ${
+          isDragging ? "border-blue-800 bg-blue-100" : "border-gray-900 bg-white"
         }`}
       >
-        <p className="mb-4 font-semibold">Drag & drop a .zip batch archive here</p>
-        <label className="cursor-pointer rounded-xl bg-blue-700 px-6 py-3 font-bold text-white hover:bg-blue-800">
-          Choose File
+        <p className="mb-6 text-3xl font-black text-black">
+          Drag & Drop `.zip` Batch Archive Here
+        </p>
+        <label className="cursor-pointer rounded-2xl border-2 border-black bg-blue-800 px-8 py-5 text-2xl font-black text-white hover:bg-blue-900 shadow-md active:scale-95">
+          CHOOSE BATCH FILE (.ZIP)
           <input
             type="file"
             accept=".zip"
@@ -142,75 +123,91 @@ export default function BatchPage() {
         </label>
       </div>
 
-      {error && <p className="mb-6 text-lg font-semibold text-red-700">{error}</p>}
-
-      {job?.summary.error && (
-        <p className="mb-6 rounded-xl border-2 border-red-700 bg-red-50 p-4 text-lg font-semibold text-red-700">
-          {job.summary.error}
+      {error && (
+        <p className="mb-6 rounded-2xl border-4 border-red-800 bg-red-100 p-5 text-2xl font-black text-red-900">
+          ⚠️ {error}
         </p>
       )}
 
+      {job?.summary.error && (
+        <p className="mb-6 rounded-2xl border-4 border-red-800 bg-red-100 p-5 text-2xl font-black text-red-900">
+          ⚠️ {job.summary.error}
+        </p>
+      )}
+
+      {/* Active Processing Details */}
       {job && !job.summary.error && (
-        <section>
-          <div className="mb-4 flex items-center justify-between">
-            <p className="text-xl font-semibold">
+        <section className="rounded-3xl border-4 border-gray-900 bg-white p-8 shadow-2xl">
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b-4 border-gray-900 pb-4">
+            <p className="text-3xl font-black text-black">
               {job.status === "COMPLETED"
-                ? `Completed: ${job.processed_items} of ${job.total_items} processed`
-                : `Processing Label ${job.processed_items} of ${job.total_items}`}
+                ? `✓ Completed: ${job.processed_items} of ${job.total_items} Labels Verified`
+                : `⏳ Processing Label ${job.processed_items} of ${job.total_items}...`}
             </p>
             {job.status === "COMPLETED" && (
               <button
                 type="button"
                 onClick={handleExport}
-                className="rounded-xl bg-gray-800 px-5 py-2 text-lg font-bold text-white hover:bg-black"
+                className="rounded-2xl border-2 border-black bg-black px-8 py-4 text-2xl font-black text-white shadow-lg hover:bg-gray-900 active:scale-95"
               >
-                Export Summary to CSV
+                📥 Export Summary to CSV
               </button>
             )}
           </div>
 
-          <div className="mb-8 h-4 w-full overflow-hidden rounded-full bg-gray-200">
+          {/* High-Contrast Progress Bar */}
+          <div className="mb-8 h-8 w-full overflow-hidden rounded-full border-2 border-black bg-gray-200">
             <div
-              className="h-full rounded-full bg-blue-700 transition-all"
+              className="h-full bg-blue-800 transition-all duration-300"
               style={{ width: `${progressPct}%` }}
             />
           </div>
 
-          <div className="mb-6 flex gap-3">
+          {/* Accessible Filter Buttons */}
+          <div className="mb-6 flex flex-wrap gap-4">
             {(["ALL", "PASS", "REVIEW", "FAIL"] as FilterOption[]).map((option) => (
               <button
                 key={option}
                 type="button"
                 onClick={() => setFilter(option)}
-                className={`rounded-lg px-4 py-2 text-lg font-semibold ${
-                  filter === option ? "bg-blue-700 text-white" : "bg-gray-100 text-gray-800"
+                className={`rounded-xl border-2 border-black px-6 py-3 text-xl font-black transition-all ${
+                  filter === option
+                    ? "bg-blue-800 text-white shadow-md"
+                    : "bg-gray-100 text-black hover:bg-gray-200"
                 }`}
               >
-                {option}
+                SHOW {option}
               </button>
             ))}
           </div>
 
-          <table className="w-full border-collapse text-lg">
-            <thead>
-              <tr className="border-b-2 border-gray-300 text-left">
-                <th className="py-2">Application ID</th>
-                <th className="py-2">Status</th>
-                <th className="py-2">Latency (s)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredResults.map((item) => (
-                <tr key={item.application_id} className="border-b border-gray-200">
-                  <td className="py-2">{item.application_id}</td>
-                  <td className="py-2">
-                    <StatusBadge status={item.status} />
-                  </td>
-                  <td className="py-2">{item.latency_seconds.toFixed(2)}</td>
+          {/* High-Contrast Results Table */}
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse border-4 border-gray-900 text-xl">
+              <thead>
+                <tr className="bg-gray-900 text-white text-left">
+                  <th className="p-4 border-r-2 border-gray-700">Application ID</th>
+                  <th className="p-4 border-r-2 border-gray-700">Status Outcome</th>
+                  <th className="p-4">Latency</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredResults.map((item) => (
+                  <tr key={item.application_id} className="border-b-2 border-gray-900 odd:bg-white even:bg-gray-100">
+                    <td className="p-4 border-r-2 border-gray-300 font-extrabold text-black">
+                      {item.application_id}
+                    </td>
+                    <td className="p-4 border-r-2 border-gray-300">
+                      <StatusBadge status={item.status} size="md" />
+                    </td>
+                    <td className="p-4 font-bold text-black">
+                      {item.latency_seconds.toFixed(2)}s
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </section>
       )}
     </main>
