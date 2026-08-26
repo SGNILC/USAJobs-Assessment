@@ -5,7 +5,7 @@ from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTa
 from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from app.core.preprocess import extract_text_from_image
+from app.core.preprocess import extract_text_with_metadata
 from app.rules.checker import verify_label_compliance
 from app.models.db import init_db, log_verification, get_batch_job, save_decision, get_decision
 from app.core.batch import process_batch_zip, generate_batch_csv, executor
@@ -47,8 +47,13 @@ async def verify_label(
         raise HTTPException(status_code=400, detail="Uploaded file is empty.")
 
     start_time = time.time()
-    ocr_extracted_text = extract_text_from_image(image_bytes)
-    verification_results = verify_label_compliance(ocr_extracted_text, manifest_data)
+    try:
+        ocr_extracted_text, image_quality = extract_text_with_metadata(image_bytes)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    verification_results = verify_label_compliance(
+        ocr_extracted_text, manifest_data, image_quality=image_quality
+    )
     latency = round(time.time() - start_time, 2)
 
     app_id = manifest_data.get("application_id", "UNKNOWN")
@@ -58,7 +63,8 @@ async def verify_label(
         "application_id": app_id,
         "latency_seconds": latency,
         "verification_result": verification_results,
-        "raw_ocr_extracted": ocr_extracted_text
+        "raw_ocr_extracted": ocr_extracted_text,
+        "image_quality": image_quality,
     }
 
 @app.post("/api/v1/verify/batch")

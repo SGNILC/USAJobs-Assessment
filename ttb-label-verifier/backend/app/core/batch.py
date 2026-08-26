@@ -6,7 +6,7 @@ import csv
 import time
 import uuid
 from concurrent.futures import ThreadPoolExecutor
-from app.core.preprocess import extract_text_from_image
+from app.core.preprocess import extract_text_with_metadata
 from app.rules.checker import verify_label_compliance
 from app.models.db import create_batch_job, update_batch_progress, log_verification
 
@@ -52,8 +52,18 @@ def process_batch_zip(zip_bytes: bytes, job_id: str):
             img_bytes = z.read(img_name)
             start_time = time.time()
             
-            ocr_text = extract_text_from_image(img_bytes)
-            eval_result = verify_label_compliance(ocr_text, app_manifest)
+            image_quality = {}
+            try:
+                ocr_text, image_quality = extract_text_with_metadata(img_bytes)
+                eval_result = verify_label_compliance(
+                    ocr_text, app_manifest, image_quality=image_quality
+                )
+            except ValueError as exc:
+                eval_result = {
+                    "overall_status": "INVALID_FILE",
+                    "flags": [{"rule": "INVALID_FILE", "severity": "FAIL", "message": str(exc)}],
+                    "checks": {},
+                }
             latency = round(time.time() - start_time, 2)
 
             status = eval_result.get("overall_status", "UNKNOWN")
@@ -65,7 +75,8 @@ def process_batch_zip(zip_bytes: bytes, job_id: str):
                 "application_id": app_id,
                 "status": status,
                 "latency_seconds": latency,
-                "details": eval_result
+                "details": eval_result,
+                "image_quality": image_quality,
             })
             
             processed_count += 1
