@@ -1,14 +1,17 @@
 import json
+import logging
 import uuid
 import time
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException, BackgroundTasks
-from fastapi.responses import Response
+from fastapi import FastAPI, Request, UploadFile, File, Form, HTTPException, BackgroundTasks
+from fastapi.responses import JSONResponse, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from app.core.preprocess import extract_text_with_metadata
 from app.rules.checker import verify_label_compliance
 from app.models.db import init_db, log_verification, get_batch_job, save_decision, get_decision
 from app.core.batch import process_batch_zip, generate_batch_csv, executor
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="TTB Label Verification Engine",
@@ -18,11 +21,23 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception):
+    logger.exception("Unhandled error while processing %s %s", request.method, request.url.path)
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal verification error. Check the backend log for details."},
+    )
 
 @app.on_event("startup")
 def startup_event():

@@ -1,6 +1,6 @@
 [
   {
-    "id": "COLA-2026-001",
+    "application_id": "COLA-2026-001",
     "scenario": "passing_bourbon",
     "image_file": "COLA-2026-001.png",
     "manifest_file": "COLA-2026-001.json",
@@ -12,7 +12,7 @@
     "expected_status": "PASS"
   },
   {
-    "id": "COLA-2026-002",
+    "application_id": "COLA-2026-002",
     "scenario": "passing_craft_beer",
     "image_file": "COLA-2026-002.png",
     "manifest_file": "COLA-2026-002.json",
@@ -24,7 +24,7 @@
     "expected_status": "PASS"
   },
   {
-    "id": "COLA-2026-003",
+    "application_id": "COLA-2026-003",
     "scenario": "passing_wine",
     "image_file": "COLA-2026-003.png",
     "manifest_file": "COLA-2026-003.json",
@@ -36,7 +36,7 @@
     "expected_status": "PASS"
   },
   {
-    "id": "COLA-2026-004",
+    "application_id": "COLA-2026-004",
     "scenario": "passing_canned_cocktail",
     "image_file": "COLA-2026-004.png",
     "manifest_file": "COLA-2026-004.json",
@@ -48,7 +48,7 @@
     "expected_status": "PASS"
   },
   {
-    "id": "COLA-2026-005",
+    "application_id": "COLA-2026-005",
     "scenario": "warning_title_case",
     "image_file": "COLA-2026-005.png",
     "manifest_file": "COLA-2026-005.json",
@@ -60,7 +60,7 @@
     "expected_status": "FAIL_CASING"
   },
   {
-    "id": "COLA-2026-006",
+    "application_id": "COLA-2026-006",
     "scenario": "warning_text_altered",
     "image_file": "COLA-2026-006.png",
     "manifest_file": "COLA-2026-006.json",
@@ -72,7 +72,7 @@
     "expected_status": "FAIL_WARNING_TEXT"
   },
   {
-    "id": "COLA-2026-007",
+    "application_id": "COLA-2026-007",
     "scenario": "warning_missing",
     "image_file": "COLA-2026-007.png",
     "manifest_file": "COLA-2026-007.json",
@@ -84,7 +84,7 @@
     "expected_status": "FAIL_MISSING_WARNING"
   },
   {
-    "id": "COLA-2026-008",
+    "application_id": "COLA-2026-008",
     "scenario": "brand_case_variance",
     "image_file": "COLA-2026-008.png",
     "manifest_file": "COLA-2026-008.json",
@@ -96,7 +96,7 @@
     "expected_status": "NEEDS_REVIEW_CASE"
   },
   {
-    "id": "COLA-2026-009",
+    "application_id": "COLA-2026-009",
     "scenario": "brand_mismatch",
     "image_file": "COLA-2026-009.png",
     "manifest_file": "COLA-2026-009.json",
@@ -108,7 +108,7 @@
     "expected_status": "FAIL_BRAND_MISMATCH"
   },
   {
-    "id": "COLA-2026-010",
+    "application_id": "COLA-2026-010",
     "scenario": "abv_mismatch",
     "image_file": "COLA-2026-010.png",
     "manifest_file": "COLA-2026-010.json",
@@ -120,7 +120,7 @@
     "expected_status": "FAIL_ABV_MISMATCH"
   },
   {
-    "id": "COLA-2026-011",
+    "application_id": "COLA-2026-011",
     "scenario": "abv_missing",
     "image_file": "COLA-2026-011.png",
     "manifest_file": "COLA-2026-011.json",
@@ -132,7 +132,7 @@
     "expected_status": "FAIL_ABV_MISMATCH"
   },
   {
-    "id": "COLA-2026-012",
+    "application_id": "COLA-2026-012",
     "scenario": "rotation_90_degrees",
     "image_file": "COLA-2026-012.png",
     "manifest_file": "COLA-2026-012.json",
@@ -146,7 +146,7 @@
     "expected_status": "PASS"
   },
   {
-    "id": "COLA-2026-013",
+    "application_id": "COLA-2026-013",
     "scenario": "minor_rotation",
     "image_file": "COLA-2026-013.png",
     "manifest_file": "COLA-2026-013.json",
@@ -160,7 +160,7 @@
     "expected_status": "PASS"
   },
   {
-    "id": "COLA-2026-014",
+    "application_id": "COLA-2026-014",
     "scenario": "synthetic_glare",
     "image_file": "COLA-2026-014.png",
     "manifest_file": "COLA-2026-014.json",
@@ -174,7 +174,7 @@
     "expected_status": "PASS"
   },
   {
-    "id": "COLA-2026-015",
+    "application_id": "COLA-2026-015",
     "scenario": "low_contrast",
     "image_file": "COLA-2026-015.png",
     "manifest_file": "COLA-2026-015.json",
@@ -188,7 +188,7 @@
     "expected_status": "PASS"
   },
   {
-    "id": "COLA-2026-016",
+    "application_id": "COLA-2026-016",
     "scenario": "glare_and_low_contrast",
     "image_file": "COLA-2026-016.png",
     "manifest_file": "COLA-2026-016.json",
@@ -204,7 +204,7 @@
     "expected_status": "NEEDS_REVIEW"
   },
   {
-    "id": "COLA-2026-017",
+    "application_id": "COLA-2026-017",
     "scenario": "warning_lowercase",
     "image_file": "COLA-2026-017.png",
     "manifest_file": "COLA-2026-017.json",
@@ -216,7 +216,7 @@
     "expected_status": "FAIL_CASING"
   },
   {
-    "id": "COLA-2026-018",
+    "application_id": "COLA-2026-018",
     "scenario": "warning_omits_sentence",
     "image_file": "COLA-2026-018.png",
     "manifest_file": "COLA-2026-018.json",
@@ -228,7 +228,7 @@
     "expected_status": "FAIL_WARNING_TEXT"
   },
   {
-    "id": "COLA-2026-019",
+    "application_id": "COLA-2026-019",
     "scenario": "rotation_and_glare",
     "image_file": "COLA-2026-019.png",
     "manifest_file": "COLA-2026-019.json",
@@ -243,7 +243,7 @@
     "expected_status": "PASS"
   },
   {
-    "id": "COLA-2026-020",
+    "application_id": "COLA-2026-020",
     "scenario": "corrupt_image_file",
     "image_file": "COLA-2026-020.png",
     "manifest_file": "COLA-2026-020.json",

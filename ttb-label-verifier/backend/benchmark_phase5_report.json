@@ -577,3 +577,582 @@
   ],
   "acceptance_passed": false
 }
+{
+  "fixture_count": 20,
+  "status_matches": 19,
+  "accuracy": 0.95,
+  "latency_gate_seconds": 5.0,
+  "latency_seconds": {
+    "mean": 6.1602,
+    "p50": 6.3986,
+    "p95": 7.2829,
+    "max": 8.0049
+  },
+  "functional_failures": [
+    {
+      "id": "COLA-2026-016",
+      "scenario": "glare_and_low_contrast",
+      "expected_status": "NEEDS_REVIEW",
+      "actual_status": "PASS",
+      "status_match": false,
+      "latency_seconds": 7.1869,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.1196,
+        "ocr": 7.0666
+      },
+      "error": null
+    }
+  ],
+  "latency_failures": [
+    {
+      "id": "COLA-2026-001",
+      "scenario": "passing_bourbon",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.5103,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0887,
+        "ocr": 6.4187
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-002",
+      "scenario": "passing_craft_beer",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.0981,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0571,
+        "ocr": 6.0405
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-003",
+      "scenario": "passing_wine",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.3986,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0707,
+        "ocr": 6.327
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-004",
+      "scenario": "passing_canned_cocktail",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.1234,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0579,
+        "ocr": 6.0649
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-005",
+      "scenario": "warning_title_case",
+      "expected_status": "FAIL_CASING",
+      "actual_status": "FAIL_CASING",
+      "status_match": true,
+      "latency_seconds": 6.1398,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0568,
+        "ocr": 6.0824
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-006",
+      "scenario": "warning_text_altered",
+      "expected_status": "FAIL_WARNING_TEXT",
+      "actual_status": "FAIL_WARNING_TEXT",
+      "status_match": true,
+      "latency_seconds": 7.2829,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0714,
+        "ocr": 7.2109
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-007",
+      "scenario": "warning_missing",
+      "expected_status": "FAIL_MISSING_WARNING",
+      "actual_status": "FAIL_MISSING_WARNING",
+      "status_match": true,
+      "latency_seconds": 5.1423,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0472,
+        "ocr": 5.0944
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-008",
+      "scenario": "brand_case_variance",
+      "expected_status": "NEEDS_REVIEW_CASE",
+      "actual_status": "NEEDS_REVIEW_CASE",
+      "status_match": true,
+      "latency_seconds": 7.0567,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0747,
+        "ocr": 6.9812
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-009",
+      "scenario": "brand_mismatch",
+      "expected_status": "FAIL_BRAND_MISMATCH",
+      "actual_status": "FAIL_BRAND_MISMATCH",
+      "status_match": true,
+      "latency_seconds": 8.0049,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0744,
+        "ocr": 7.9299
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-010",
+      "scenario": "abv_mismatch",
+      "expected_status": "FAIL_ABV_MISMATCH",
+      "actual_status": "FAIL_ABV_MISMATCH",
+      "status_match": true,
+      "latency_seconds": 6.4099,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0775,
+        "ocr": 6.3317
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-011",
+      "scenario": "abv_missing",
+      "expected_status": "FAIL_ABV_MISMATCH",
+      "actual_status": "FAIL_ABV_MISMATCH",
+      "status_match": true,
+      "latency_seconds": 6.0729,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0593,
+        "ocr": 6.0128
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-012",
+      "scenario": "rotation_90_degrees",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.2861,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0762,
+        "ocr": 6.2093
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-013",
+      "scenario": "minor_rotation",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.9009,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.091,
+        "ocr": 6.8091
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-014",
+      "scenario": "synthetic_glare",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.3373,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0626,
+        "ocr": 6.274
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-015",
+      "scenario": "low_contrast",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.7636,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0617,
+        "ocr": 6.701
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-016",
+      "scenario": "glare_and_low_contrast",
+      "expected_status": "NEEDS_REVIEW",
+      "actual_status": "PASS",
+      "status_match": false,
+      "latency_seconds": 7.1869,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.1196,
+        "ocr": 7.0666
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-017",
+      "scenario": "warning_lowercase",
+      "expected_status": "FAIL_CASING",
+      "actual_status": "FAIL_CASING",
+      "status_match": true,
+      "latency_seconds": 6.1664,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0747,
+        "ocr": 6.0911
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-018",
+      "scenario": "warning_omits_sentence",
+      "expected_status": "FAIL_WARNING_TEXT",
+      "actual_status": "FAIL_WARNING_TEXT",
+      "status_match": true,
+      "latency_seconds": 5.6054,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0546,
+        "ocr": 5.5502
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-019",
+      "scenario": "rotation_and_glare",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.7179,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0703,
+        "ocr": 6.647
+      },
+      "error": null
+    }
+  ],
+  "cases": [
+    {
+      "id": "COLA-2026-001",
+      "scenario": "passing_bourbon",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.5103,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0887,
+        "ocr": 6.4187
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-002",
+      "scenario": "passing_craft_beer",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.0981,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0571,
+        "ocr": 6.0405
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-003",
+      "scenario": "passing_wine",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.3986,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0707,
+        "ocr": 6.327
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-004",
+      "scenario": "passing_canned_cocktail",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.1234,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0579,
+        "ocr": 6.0649
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-005",
+      "scenario": "warning_title_case",
+      "expected_status": "FAIL_CASING",
+      "actual_status": "FAIL_CASING",
+      "status_match": true,
+      "latency_seconds": 6.1398,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0568,
+        "ocr": 6.0824
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-006",
+      "scenario": "warning_text_altered",
+      "expected_status": "FAIL_WARNING_TEXT",
+      "actual_status": "FAIL_WARNING_TEXT",
+      "status_match": true,
+      "latency_seconds": 7.2829,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0714,
+        "ocr": 7.2109
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-007",
+      "scenario": "warning_missing",
+      "expected_status": "FAIL_MISSING_WARNING",
+      "actual_status": "FAIL_MISSING_WARNING",
+      "status_match": true,
+      "latency_seconds": 5.1423,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0472,
+        "ocr": 5.0944
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-008",
+      "scenario": "brand_case_variance",
+      "expected_status": "NEEDS_REVIEW_CASE",
+      "actual_status": "NEEDS_REVIEW_CASE",
+      "status_match": true,
+      "latency_seconds": 7.0567,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0747,
+        "ocr": 6.9812
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-009",
+      "scenario": "brand_mismatch",
+      "expected_status": "FAIL_BRAND_MISMATCH",
+      "actual_status": "FAIL_BRAND_MISMATCH",
+      "status_match": true,
+      "latency_seconds": 8.0049,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0744,
+        "ocr": 7.9299
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-010",
+      "scenario": "abv_mismatch",
+      "expected_status": "FAIL_ABV_MISMATCH",
+      "actual_status": "FAIL_ABV_MISMATCH",
+      "status_match": true,
+      "latency_seconds": 6.4099,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0775,
+        "ocr": 6.3317
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-011",
+      "scenario": "abv_missing",
+      "expected_status": "FAIL_ABV_MISMATCH",
+      "actual_status": "FAIL_ABV_MISMATCH",
+      "status_match": true,
+      "latency_seconds": 6.0729,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0593,
+        "ocr": 6.0128
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-012",
+      "scenario": "rotation_90_degrees",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.2861,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0762,
+        "ocr": 6.2093
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-013",
+      "scenario": "minor_rotation",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.9009,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.091,
+        "ocr": 6.8091
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-014",
+      "scenario": "synthetic_glare",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.3373,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0626,
+        "ocr": 6.274
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-015",
+      "scenario": "low_contrast",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.7636,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0617,
+        "ocr": 6.701
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-016",
+      "scenario": "glare_and_low_contrast",
+      "expected_status": "NEEDS_REVIEW",
+      "actual_status": "PASS",
+      "status_match": false,
+      "latency_seconds": 7.1869,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.1196,
+        "ocr": 7.0666
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-017",
+      "scenario": "warning_lowercase",
+      "expected_status": "FAIL_CASING",
+      "actual_status": "FAIL_CASING",
+      "status_match": true,
+      "latency_seconds": 6.1664,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0747,
+        "ocr": 6.0911
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-018",
+      "scenario": "warning_omits_sentence",
+      "expected_status": "FAIL_WARNING_TEXT",
+      "actual_status": "FAIL_WARNING_TEXT",
+      "status_match": true,
+      "latency_seconds": 5.6054,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0546,
+        "ocr": 5.5502
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-019",
+      "scenario": "rotation_and_glare",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "status_match": true,
+      "latency_seconds": 6.7179,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0703,
+        "ocr": 6.647
+      },
+      "error": null
+    },
+    {
+      "id": "COLA-2026-020",
+      "scenario": "corrupt_image_file",
+      "expected_status": "INVALID_FILE",
+      "actual_status": "INVALID_FILE",
+      "status_match": true,
+      "latency_seconds": 0.0,
+      "under_latency_gate": true,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0,
+        "ocr": 0.0
+      },
+      "error": "Could not decode image bytes; file may be corrupt or not a supported image format."
+    }
+  ],
+  "acceptance_passed": false
+}

@@ -1,0 +1,50 @@
+{
+  "fixture_count": 1,
+  "status_matches": 1,
+  "accuracy": 1.0,
+  "latency_gate_seconds": 5.0,
+  "latency_seconds": {
+    "mean": 9.0938,
+    "p50": 9.0938,
+    "p95": 9.0938,
+    "max": 9.0938
+  },
+  "functional_failures": [],
+  "latency_failures": [
+    {
+      "id": "COLA-2026-001",
+      "scenario": "passing_bourbon",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "confidence": 0.8848657746978503,
+      "low_confidence": false,
+      "status_match": true,
+      "latency_seconds": 9.0938,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0632,
+        "ocr": 9.0283
+      },
+      "error": null
+    }
+  ],
+  "cases": [
+    {
+      "id": "COLA-2026-001",
+      "scenario": "passing_bourbon",
+      "expected_status": "PASS",
+      "actual_status": "PASS",
+      "confidence": 0.8848657746978503,
+      "low_confidence": false,
+      "status_match": true,
+      "latency_seconds": 9.0938,
+      "under_latency_gate": false,
+      "processing_breakdown_seconds": {
+        "preprocess": 0.0632,
+        "ocr": 9.0283
+      },
+      "error": null
+    }
+  ],
+  "acceptance_passed": false
+}

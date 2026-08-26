@@ -115,4 +115,4 @@ We understand this is time-constrained. A working core application with clean co
 *Questions? Reach out for clarification—though we also value how you fill in gaps independently.*
 
 Good luck!
-```
+

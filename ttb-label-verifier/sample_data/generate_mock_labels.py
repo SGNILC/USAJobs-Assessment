@@ -65,7 +65,7 @@ def case(
     if reason:
         expected_result["reason"] = reason
     return {
-        "id": case_id,
+        "application_id": case_id,
         "scenario": scenario,
         "app_data": application(case_id, app_brand, kind, app_abv, volume),
         "label_text": text(label_brand or app_brand, kind, label_abv if label_abv is not None else f"{app_abv} ALC/VOL", volume, warning),
@@ -164,15 +164,15 @@ def generate_dataset() -> None:
     MANIFEST_DIR.mkdir(exist_ok=True)
     index = []
     for fixture in TEST_CASES:
-        image_file = f"{fixture['id']}.png"
-        manifest_file = f"{fixture['id']}.json"
+        image_file = f"{fixture['application_id']}.png"
+        manifest_file = f"{fixture['application_id']}.json"
         write_json(MANIFEST_DIR / manifest_file, fixture["app_data"])
         if fixture["invalid_file"]:
             (IMAGE_DIR / image_file).write_bytes(b"This is deliberately not a valid PNG file.\n")
         else:
             render_label(fixture["label_text"], IMAGE_DIR / image_file, fixture["artifact"])
         index.append({
-            "id": fixture["id"],
+            "application_id": fixture["application_id"],
             "scenario": fixture["scenario"],
             "image_file": image_file,
             "manifest_file": manifest_file,
@@ -183,7 +183,7 @@ def generate_dataset() -> None:
         })
 
     write_json(ROOT / "dataset_index.json", index)
-    write_json(ROOT / "manifest.json", index)
+    write_json(ROOT / "manifest.json", [fixture["app_data"] for fixture in TEST_CASES])
     print(f"Generated {len(index)} synthetic label fixtures in '{ROOT}'.")
 
 

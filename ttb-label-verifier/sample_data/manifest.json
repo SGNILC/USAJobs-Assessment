@@ -1,259 +1,142 @@
 [
   {
-    "id": "COLA-2026-001",
-    "scenario": "passing_bourbon",
-    "image_file": "COLA-2026-001.png",
-    "manifest_file": "COLA-2026-001.json",
-    "input_kind": "image",
-    "artifact": {},
-    "expected_result": {
-      "overall_status": "PASS"
-    },
-    "expected_status": "PASS"
+    "application_id": "COLA-2026-001",
+    "brand_name": "OLD TOM DISTILLERY",
+    "class_type": "Kentucky Straight Bourbon Whiskey",
+    "alcohol_by_volume": "45%",
+    "net_contents": "750 mL"
   },
   {
-    "id": "COLA-2026-002",
-    "scenario": "passing_craft_beer",
-    "image_file": "COLA-2026-002.png",
-    "manifest_file": "COLA-2026-002.json",
-    "input_kind": "image",
-    "artifact": {},
-    "expected_result": {
-      "overall_status": "PASS"
-    },
-    "expected_status": "PASS"
+    "application_id": "COLA-2026-002",
+    "brand_name": "BLUE RIDGE BREWING",
+    "class_type": "Craft IPA",
+    "alcohol_by_volume": "6.5%",
+    "net_contents": "12 fl oz"
   },
   {
-    "id": "COLA-2026-003",
-    "scenario": "passing_wine",
-    "image_file": "COLA-2026-003.png",
-    "manifest_file": "COLA-2026-003.json",
-    "input_kind": "image",
-    "artifact": {},
-    "expected_result": {
-      "overall_status": "PASS"
-    },
-    "expected_status": "PASS"
+    "application_id": "COLA-2026-003",
+    "brand_name": "VALLEY VINEYARDS",
+    "class_type": "Pinot Noir",
+    "alcohol_by_volume": "13.5%",
+    "net_contents": "750 mL"
   },
   {
-    "id": "COLA-2026-004",
-    "scenario": "passing_canned_cocktail",
-    "image_file": "COLA-2026-004.png",
-    "manifest_file": "COLA-2026-004.json",
-    "input_kind": "image",
-    "artifact": {},
-    "expected_result": {
-      "overall_status": "PASS"
-    },
-    "expected_status": "PASS"
+    "application_id": "COLA-2026-004",
+    "brand_name": "HARBOR & HEARTH",
+    "class_type": "Sparkling Cocktail",
+    "alcohol_by_volume": "8%",
+    "net_contents": "355 mL"
   },
   {
-    "id": "COLA-2026-005",
-    "scenario": "warning_title_case",
-    "image_file": "COLA-2026-005.png",
-    "manifest_file": "COLA-2026-005.json",
-    "input_kind": "image",
-    "artifact": {},
-    "expected_result": {
-      "overall_status": "FAIL_CASING"
-    },
-    "expected_status": "FAIL_CASING"
+    "application_id": "COLA-2026-005",
+    "brand_name": "BLUE RIDGE BREWING",
+    "class_type": "Craft IPA",
+    "alcohol_by_volume": "6.5%",
+    "net_contents": "12 fl oz"
   },
   {
-    "id": "COLA-2026-006",
-    "scenario": "warning_text_altered",
-    "image_file": "COLA-2026-006.png",
-    "manifest_file": "COLA-2026-006.json",
-    "input_kind": "image",
-    "artifact": {},
-    "expected_result": {
-      "overall_status": "FAIL_WARNING_TEXT"
-    },
-    "expected_status": "FAIL_WARNING_TEXT"
+    "application_id": "COLA-2026-006",
+    "brand_name": "COPPER FIELD",
+    "class_type": "American Whiskey",
+    "alcohol_by_volume": "42%",
+    "net_contents": "750 mL"
   },
   {
-    "id": "COLA-2026-007",
-    "scenario": "warning_missing",
-    "image_file": "COLA-2026-007.png",
-    "manifest_file": "COLA-2026-007.json",
-    "input_kind": "image",
-    "artifact": {},
-    "expected_result": {
-      "overall_status": "FAIL_MISSING_WARNING"
-    },
-    "expected_status": "FAIL_MISSING_WARNING"
+    "application_id": "COLA-2026-007",
+    "brand_name": "PINE & PEAR",
+    "class_type": "Pear Cider",
+    "alcohol_by_volume": "5%",
+    "net_contents": "500 mL"
   },
   {
-    "id": "COLA-2026-008",
-    "scenario": "brand_case_variance",
-    "image_file": "COLA-2026-008.png",
-    "manifest_file": "COLA-2026-008.json",
-    "input_kind": "image",
-    "artifact": {},
-    "expected_result": {
-      "overall_status": "NEEDS_REVIEW_CASE"
-    },
-    "expected_status": "NEEDS_REVIEW_CASE"
+    "application_id": "COLA-2026-008",
+    "brand_name": "STONE'S THROW",
+    "class_type": "Dry Gin",
+    "alcohol_by_volume": "40%",
+    "net_contents": "750 mL"
   },
   {
-    "id": "COLA-2026-009",
-    "scenario": "brand_mismatch",
-    "image_file": "COLA-2026-009.png",
-    "manifest_file": "COLA-2026-009.json",
-    "input_kind": "image",
-    "artifact": {},
-    "expected_result": {
-      "overall_status": "FAIL_BRAND_MISMATCH"
-    },
-    "expected_status": "FAIL_BRAND_MISMATCH"
+    "application_id": "COLA-2026-009",
+    "brand_name": "NORTH STAR DISTILLERY",
+    "class_type": "Vodka",
+    "alcohol_by_volume": "40%",
+    "net_contents": "1 L"
   },
   {
-    "id": "COLA-2026-010",
-    "scenario": "abv_mismatch",
-    "image_file": "COLA-2026-010.png",
-    "manifest_file": "COLA-2026-010.json",
-    "input_kind": "image",
-    "artifact": {},
-    "expected_result": {
-      "overall_status": "FAIL_ABV_MISMATCH"
-    },
-    "expected_status": "FAIL_ABV_MISMATCH"
+    "application_id": "COLA-2026-010",
+    "brand_name": "VALLEY VINEYARDS",
+    "class_type": "Pinot Noir",
+    "alcohol_by_volume": "13.5%",
+    "net_contents": "750 mL"
   },
   {
-    "id": "COLA-2026-011",
-    "scenario": "abv_missing",
-    "image_file": "COLA-2026-011.png",
-    "manifest_file": "COLA-2026-011.json",
-    "input_kind": "image",
-    "artifact": {},
-    "expected_result": {
-      "overall_status": "FAIL_ABV_MISMATCH"
-    },
-    "expected_status": "FAIL_ABV_MISMATCH"
+    "application_id": "COLA-2026-011",
+    "brand_name": "MEADOWLARK MEAD",
+    "class_type": "Honey Wine",
+    "alcohol_by_volume": "11%",
+    "net_contents": "375 mL"
   },
   {
-    "id": "COLA-2026-012",
-    "scenario": "rotation_90_degrees",
-    "image_file": "COLA-2026-012.png",
-    "manifest_file": "COLA-2026-012.json",
-    "input_kind": "image",
-    "artifact": {
-      "rotation_degrees": 90
-    },
-    "expected_result": {
-      "overall_status": "PASS"
-    },
-    "expected_status": "PASS"
+    "application_id": "COLA-2026-012",
+    "brand_name": "HIGH PLAINS RYE",
+    "class_type": "Straight Rye Whiskey",
+    "alcohol_by_volume": "46%",
+    "net_contents": "750 mL"
   },
   {
-    "id": "COLA-2026-013",
-    "scenario": "minor_rotation",
-    "image_file": "COLA-2026-013.png",
-    "manifest_file": "COLA-2026-013.json",
-    "input_kind": "image",
-    "artifact": {
-      "rotation_degrees": -8
-    },
-    "expected_result": {
-      "overall_status": "PASS"
-    },
-    "expected_status": "PASS"
+    "application_id": "COLA-2026-013",
+    "brand_name": "CEDAR CREEK",
+    "class_type": "London Dry Gin",
+    "alcohol_by_volume": "41%",
+    "net_contents": "750 mL"
   },
   {
-    "id": "COLA-2026-014",
-    "scenario": "synthetic_glare",
-    "image_file": "COLA-2026-014.png",
-    "manifest_file": "COLA-2026-014.json",
-    "input_kind": "image",
-    "artifact": {
-      "glare": true
-    },
-    "expected_result": {
-      "overall_status": "PASS"
-    },
-    "expected_status": "PASS"
+    "application_id": "COLA-2026-014",
+    "brand_name": "RIVERBEND BREWING",
+    "class_type": "Amber Ale",
+    "alcohol_by_volume": "5.8%",
+    "net_contents": "12 fl oz"
   },
   {
-    "id": "COLA-2026-015",
-    "scenario": "low_contrast",
-    "image_file": "COLA-2026-015.png",
-    "manifest_file": "COLA-2026-015.json",
-    "input_kind": "image",
-    "artifact": {
-      "low_contrast": true
-    },
-    "expected_result": {
-      "overall_status": "PASS"
-    },
-    "expected_status": "PASS"
+    "application_id": "COLA-2026-015",
+    "brand_name": "GOLDEN HOUR",
+    "class_type": "Sauvignon Blanc",
+    "alcohol_by_volume": "12.5%",
+    "net_contents": "750 mL"
   },
   {
-    "id": "COLA-2026-016",
-    "scenario": "glare_and_low_contrast",
-    "image_file": "COLA-2026-016.png",
-    "manifest_file": "COLA-2026-016.json",
-    "input_kind": "image",
-    "artifact": {
-      "glare": true,
-      "low_contrast": true
-    },
-    "expected_result": {
-      "overall_status": "NEEDS_REVIEW",
-      "reason": "Combined glare and low contrast may require manual review."
-    },
-    "expected_status": "NEEDS_REVIEW"
+    "application_id": "COLA-2026-016",
+    "brand_name": "SUMMIT SPRINGS",
+    "class_type": "Hard Seltzer",
+    "alcohol_by_volume": "4.5%",
+    "net_contents": "355 mL"
   },
   {
-    "id": "COLA-2026-017",
-    "scenario": "warning_lowercase",
-    "image_file": "COLA-2026-017.png",
-    "manifest_file": "COLA-2026-017.json",
-    "input_kind": "image",
-    "artifact": {},
-    "expected_result": {
-      "overall_status": "FAIL_CASING"
-    },
-    "expected_status": "FAIL_CASING"
+    "application_id": "COLA-2026-017",
+    "brand_name": "MORNING TIDE",
+    "class_type": "Rum",
+    "alcohol_by_volume": "40%",
+    "net_contents": "750 mL"
   },
   {
-    "id": "COLA-2026-018",
-    "scenario": "warning_omits_sentence",
-    "image_file": "COLA-2026-018.png",
-    "manifest_file": "COLA-2026-018.json",
-    "input_kind": "image",
-    "artifact": {},
-    "expected_result": {
-      "overall_status": "FAIL_WARNING_TEXT"
-    },
-    "expected_status": "FAIL_WARNING_TEXT"
+    "application_id": "COLA-2026-018",
+    "brand_name": "ORCHARD LINE",
+    "class_type": "Apple Brandy",
+    "alcohol_by_volume": "38%",
+    "net_contents": "750 mL"
   },
   {
-    "id": "COLA-2026-019",
-    "scenario": "rotation_and_glare",
-    "image_file": "COLA-2026-019.png",
-    "manifest_file": "COLA-2026-019.json",
-    "input_kind": "image",
-    "artifact": {
-      "rotation_degrees": 6,
-      "glare": true
-    },
-    "expected_result": {
-      "overall_status": "PASS"
-    },
-    "expected_status": "PASS"
+    "application_id": "COLA-2026-019",
+    "brand_name": "FAR HORIZON",
+    "class_type": "Wheat Beer",
+    "alcohol_by_volume": "5.2%",
+    "net_contents": "16 fl oz"
   },
   {
-    "id": "COLA-2026-020",
-    "scenario": "corrupt_image_file",
-    "image_file": "COLA-2026-020.png",
-    "manifest_file": "COLA-2026-020.json",
-    "input_kind": "invalid_file",
-    "artifact": {},
-    "expected_result": {
-      "overall_status": "INVALID_FILE",
-      "http_status": 400,
-      "reason": "Image bytes are intentionally corrupt."
-    },
-    "expected_status": "INVALID_FILE"
+    "application_id": "COLA-2026-020",
+    "brand_name": "BROKEN BOTTLE",
+    "class_type": "Test Spirit",
+    "alcohol_by_volume": "40%",
+    "net_contents": "750 mL"
   }
 ]

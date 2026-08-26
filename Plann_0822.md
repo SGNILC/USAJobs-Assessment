@@ -14,7 +14,7 @@
 
 * ✅ Phase 4: High-Accessibility React Web Interface (73-Yo Benchmark)
 
-* ⏳ Phase 5: Automated Benchmarking, Final Testing & Deployment
+* 🔄 Phase 5: Automated Benchmarking, Final Testing & Deployment (benchmarking complete; release work remaining)
 
 ---
 
@@ -203,22 +203,35 @@ The architecture leverages tools directly matching candidate experience while re
 
 ### Phase 5: Synthetic Test Generator, Benchmarking & Deployment (P5)
 
-* **Task 5.1: Synthetic Label Dataset Generator (`sample_data/generate_mock_labels.py`)**
-  * Python script utilizing `Pillow` to generate 20+ test images:
-    * Standard compliant spirits, wine, and craft beer labels.
-    * Non-compliant labels: Lowercase `"Government Warning:"`, altered text, missing ABV, mismatched brand names.
-    * Artifact test cases: Rotated labels, synthetic glare, and low-contrast background images.
+* **Task 5.1: Synthetic Label Dataset Generator (`sample_data/generate_mock_labels.py`) ✅ COMPLETE**
+  * Deterministic corpus contains 20 cases covering passing labels, warning casing/text/missing cases, brand variance/mismatch, ABV mismatch/missing cases, rotation, glare, low contrast, combined artifacts, and a corrupt image.
+  * `dataset_index.json` records each fixture's expected status and artifact metadata.
 
-* **Task 5.2: Latency & Accuracy Automated Benchmark Suite**
-  * Execution script verifying that single label processing times remain strictly under $5\text{s}$ across all test cases.
+* **Task 5.2: Latency & Accuracy Automated Benchmark Suite ✅ COMPLETE**
+  * `backend/benchmark_phase5.py` writes `backend/benchmark.json` by default and records per-case status, confidence, latency, preprocessing/OCR timing, and failures.
+  * Reproduce the benchmark from the repository root with: `backend\venv\Scripts\python.exe backend\benchmark_phase5.py --limit 20 --output backend\benchmark.json`.
+  * Best recorded EasyOCR run: 19/20 correct (95%). CPU-only PyTorch was confirmed (`2.13.0+cpu`, CUDA unavailable, no `nvidia-smi`).
+  * EasyOCR latency was approximately 5-8 seconds per image, so the five-second target is not met in this environment.
+  * Tesseract benchmark: approximately 25-35% accuracy with sub-second average latency; rejected for final decisions because accuracy is insufficient.
+  * The 1024-pixel test reduced speed only marginally and reduced accuracy to 20-30%; the working setting remains 1280 pixels.
+  * Known fixture issue: `COLA-2026-016` returns `PASS` instead of `NEEDS_REVIEW` because measured glare was `0.0` and the quality gate requires both glare and low contrast.
 
-* **Task 5.3: Repository & Deployment**
-  * Deploy working application prototype to public URL (Render / Railway / Vercel).
-  * Finalize `README.md` detailing quickstart commands, local docker setup, architectural trade-offs, and offline network compliance.
+* **Task 5.3: Release hardening 🔄 IN PROGRESS**
+  * Removed the abandoned Tesseract execution path from the active EasyOCR pipeline and retained one global OCR reader.
+  * Added confidence and manual-review metadata to single and batch results; fixed JSON serialization of crop bounds.
+  * Remaining: verify the current end-to-end test run after cleanup, review upload/configuration behavior, and improve the `COLA-2026-016` quality heuristic if time permits.
+
+* **Task 5.4: Repository & Deployment ⏳ NOT STARTED**
+  * Finalize README setup/run instructions, known limitations, benchmark evidence, and offline-network assumptions.
+  * Deploy the working prototype to one selected target and smoke-test health, single verification, batch polling/export, and agent decisions.
 
 ---
 
-## 4. Architectural Alignment Questions
+## 4. Overall Phase 5 Assessment
+
+Phase 5 has produced a measurable prototype, but not a production-ready deployment. Accuracy is strong on the synthetic corpus when EasyOCR and the 1280-pixel CLAHE path are used; throughput is limited by the available CPU-only environment. Confidence metadata and manual-review routing reduce operational risk for larger batches, but they do not replace human review or guarantee correctness. The remaining work is release hardening, final documentation, deployment, and acceptance evidence.
+
+## 5. Architectural Alignment Questions
 
 1. **Pre-packaged Sample Data:** Should we include a pre-configured batch ZIP file (`sample_batch_200.zip`) directly inside the `sample_data/` directory so reviewers can test the 200–300 application queue with a single click?
 2. **Export Formatting:** For the batch export functionality, is a standard `.csv` file sufficient, or would an `.xlsx` file formatted to match federal inspection templates be preferred?

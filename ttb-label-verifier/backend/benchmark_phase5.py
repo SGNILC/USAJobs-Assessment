@@ -40,7 +40,7 @@ def run_benchmark(index_path: Path, max_seconds: float, limit: int | None = None
     latencies: list[float] = []
 
     for fixture in fixtures:
-        print(f"Benchmarking {fixture['id']} — {fixture['scenario']}...", flush=True)
+        print(f"Benchmarking {fixture['application_id']} — {fixture['scenario']}...", flush=True)
 
         expected = fixture["expected_result"]["overall_status"]
         image_path = DATASET_DIR / "images" / fixture["image_file"]
@@ -70,10 +70,12 @@ def run_benchmark(index_path: Path, max_seconds: float, limit: int | None = None
         latencies.append(latency)
         cases.append(
             {
-                "id": fixture["id"],
+                "application_id": fixture["application_id"],
                 "scenario": fixture["scenario"],
                 "expected_status": expected,
                 "actual_status": actual,
+                "confidence": image_quality.get("ocr_confidence", 0.0),
+                "low_confidence": image_quality.get("low_confidence", False),
                 "status_match": actual == expected,
                 "latency_seconds": round(latency, 4),
                 "under_latency_gate": latency <= max_seconds,
@@ -84,6 +86,8 @@ def run_benchmark(index_path: Path, max_seconds: float, limit: int | None = None
                 "error": error,
             }
         )
+        print(f"{fixture['application_id']} quality: {image_quality}")
+
 
     status_matches = sum(case["status_match"] for case in cases)
     latency_failures = [case for case in cases if not case["under_latency_gate"]]
@@ -113,7 +117,7 @@ def main() -> int:
     parser.add_argument("--index", type=Path, default=DEFAULT_INDEX)
     parser.add_argument("--max-seconds", type=float, default=5.0)
     parser.add_argument("--limit", type=int, help="Run only the first N fixtures while profiling.")
-    parser.add_argument("--output", type=Path)
+    parser.add_argument("--output", type=Path,     default=BACKEND_DIR / "benchmark.json",)
     args = parser.parse_args()
 
     report = run_benchmark(args.index, args.max_seconds, args.limit)
