@@ -2,42 +2,72 @@
 
 ## Purpose
 
-This project is a standalone proof of concept for reviewing alcohol beverage label artwork against application data. It automates routine comparisons for brand name, class/type, alcohol by volume (ABV), and the required Government Warning statement, while leaving final judgment with a human reviewer.
+This project is a standalone proof of concept for reviewing alcohol beverage label artwork against application data. It automates routine comparisons for brand name, class/type, alcohol by volume (ABV), and the required Government Warning statement while keeping final judgment with a human reviewer.
 
-The prototype was created for a job application assessment. It is not intended for formal regulatory decisions, business operations, professional use, production deployment, or integration with the TTB COLA system.
+This prototype was created for a job application assessment. It is not intended for formal regulatory decisions, business operations, professional use, production deployment, or integration with the TTB COLA system.
 
-## Repository structure:
-    ```text
-    ttb-label-verifier/
-    ├── backend/
-    │   ├── app/
-    │   │   ├── api/          # FastAPI routes (single, batch, status, export)
-    │   │   ├── core/         # Image preprocessing & local OCR pipeline
-    │   │   ├── rules/        # Verification algorithms (Warning, Brand, ABV)
-    │   │   ├── models/       # Pydantic schemas & SQLite ORM/queries
-    │   │   └── utils/        # Export helpers (CSV / Excel formatters)
-    │   ├── tests/            # Unit & benchmark test suites
-    │   └── requirements.txt
-    ├── frontend/             # React / Expo Web Workspace
-    │   ├── src/
-    │   │   ├── components/   # High-contrast UI elements, status badges
-    │   │   ├── pages/        # Inspector Review, Batch Queue, Audit Logs
-    │   │   └── services/     # API integration client
-    │   └── package.json
-    ├── sample_data/          # Mock label generator & synthetic dataset
-    └── README.md
-    ```
-## What The Application Does
+## Repository structure
 
-- Accepts an application manifest and one label image for individual verification.
-- Uses local OpenCV preprocessing and offline EasyOCR.
-- Checks Government Warning presence, casing, and text.
-- Compares brand name with normalization and fuzzy matching.
-- Checks the declared ABV against text detected on the label.
-- Reports overall status, detected text, OCR confidence, latency, image-quality metadata, and manual-review recommendation.
-- Accepts ZIP batches containing label images and a `manifest.json` file.
-- Tracks batch progress and provides CSV export.
-- Allows an inspector to record an APPROVED or REJECTED manual decision.
+```text
+ttb-label-verifier/
+├── backend/
+│   ├── app/
+│   │   ├── core/         # OCR, image preprocessing, batch processing
+│   │   ├── models/       # SQLite helpers and persistence
+│   │   ├── rules/        # TTB compliance logic
+│   │   └── main.py       # FastAPI endpoints
+│   ├── tests/            # validation and smoke tests
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   └── utils/
+│   └── package.json
+├── sample_data/
+├── README.md
+├── README2.md
+├── Plann_0822.md
+├── db/
+└── ttb-label-verifier/
+```
+
+## What the application does
+
+- Accepts a manifest and one label image for individual verification
+- Uses local OpenCV preprocessing and offline EasyOCR
+- Checks Government Warning presence, casing, and required text
+- Compares brand name with normalization and fuzzy matching
+- Checks the declared ABV against OCR text on the label
+- Reports overall status, OCR text, latency, and manual-review recommendation
+- Accepts ZIP batches containing label images and a manifest
+- Tracks batch progress and provides CSV export
+- Allows an inspector to record an APPROVED or REJECTED manual decision
+
+## Current verification data contract
+
+The backend currently returns a minimal per-check object with a status, for example:
+
+```json
+{
+  "overall_status": "PASS",
+  "flags": [
+    {
+      "rule": "BRAND_MISMATCH",
+      "severity": "FAIL",
+      "message": "Expected brand name 'OLD TOM DISTILLERY' not found on label artwork."
+    }
+  ],
+  "checks": {
+    "government_warning": { "status": "PASS" },
+    "brand_name": { "status": "FAIL_BRAND_MISMATCH" },
+    "alcohol_by_volume": { "status": "PASS" }
+  }
+}
+```
+
+This is the schema currently used by the app. Richer fields like `expected`, `extracted`, and `details` are optional UI metadata rather than a required backend contract. The frontend is written to render them when they exist, but it must safely tolerate missing values.
 
 ## Technology
 
@@ -45,7 +75,7 @@ The prototype was created for a job application assessment. It is not intended f
 - Frontend: React, TypeScript, Vite, Tailwind CSS
 - OCR: Local EasyOCR; no cloud OCR API is required
 
-## Run Locally
+## Run locally
 
 ### Backend
 
@@ -84,18 +114,18 @@ VITE_API_BASE_URL=http://127.0.0.1:8000
 
 Restart Vite after changing this value.
 
-## Individual Review Workflow
+## Individual review workflow
 
 1. Open the frontend review page.
 2. Enter the application ID, brand name, class/type, and ABV.
 3. Select a label image.
 4. Submit the verification.
-5. Review the status badge, checklist, OCR confidence, latency, and manual-review recommendation.
+5. Review the status badge, checklist, and manual-review recommendation.
 6. Record an approval or rejection when human judgment is required.
 
 Use simple ABV values such as `45%` in the manifest field.
 
-## Batch Workflow
+## Batch workflow
 
 A batch ZIP should contain:
 
@@ -118,9 +148,9 @@ Each manifest entry must contain application fields at the top level:
 }
 ```
 
-The image filename without its extension must match `application_id`. Upload the ZIP on the Batch Queue page, wait for completion, review statuses and confidence values, then export the CSV summary.
+The image filename without its extension must match `application_id`. Upload the ZIP on the Batch Queue page, wait for completion, review the job summary, and export the CSV report.
 
-The synthetic batch fixtures can be regenerated from the repository root:
+The synthetic fixtures can be regenerated from the repository root:
 
 ```powershell
 .\backend\venv\Scripts\python.exe sample_data\generate_mock_labels.py
@@ -134,20 +164,19 @@ Run the benchmark from the repository root:
 .\backend\venv\Scripts\python.exe backend\benchmark_phase5.py --limit 20 --output backend\benchmark.json
 ```
 
-The report includes fixture accuracy, per-image latency, preprocessing and OCR timing, confidence, and functional failures.
+The report includes fixture accuracy, per-image latency, preprocessing and OCR timing, and functional failures.
 
 The best recorded EasyOCR run matched 19 of 20 synthetic fixtures, or 95% accuracy. Mean latency was approximately 4.54 seconds on an otherwise idle laptop, although several individual images exceeded five seconds.
 
-## Known Limitations
+## Known limitations
 
-- The available environment uses CPU-only PyTorch (`2.13.0+cpu`); CUDA and an NVIDIA GPU were not available.
-- EasyOCR is accurate on the synthetic corpus but commonly takes about 5-8 seconds per image on this hardware.
-- Tesseract was tested as an alternative and was faster, but its measured synthetic-corpus accuracy was only approximately 25-35%, so it is not the primary engine.
-- The 1024-pixel image test reduced accuracy to approximately 20-30%; the working image limit is 1280 pixels.
+- The environment uses CPU-only PyTorch (`2.13.0+cpu`); CUDA and an NVIDIA GPU were not available.
+- EasyOCR is accurate on the synthetic corpus but commonly takes about 5–8 seconds per image on this hardware.
+- Tesseract was tested as an alternative and was faster, but its synthetic accuracy was too low to be the primary engine.
+- The 1024-pixel image test reduced accuracy further; the working image limit remains 1280 pixels.
 - The dataset is synthetic and is not representative of all real label photographs.
-- `COLA-2026-016` demonstrates a quality-detection gap: the combined glare/low-contrast fixture can return `PASS` because measured glare was `0.0` and the current rule requires both glare and low contrast.
-- OCR confidence is a recognition signal, not a correctness guarantee.
-- GPU performance and sustained throughput for batches of 200-300 labels were not validated.
+- The OCR confidence signal is not a guarantee of correctness.
+- GPU performance and sustained throughput for larger batches were not validated.
 - The prototype has no authentication, production retention policy, COLA integration, or formal regulatory approval.
 
 ## Disclaimer
