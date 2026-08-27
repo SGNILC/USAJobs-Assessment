@@ -2,9 +2,17 @@
 
 ## Purpose
 
-This project is a standalone proof of concept for reviewing alcohol beverage label artwork against application data. It automates routine comparisons for brand name, class/type, alcohol by volume (ABV), and the required Government Warning statement while keeping final judgment with a human reviewer.
+This project is a standalone prototype for automating the review of alcohol beverage labels against application metadata. It performs comparisons—such as brand name, class/type, alcohol by volume (ABV), and the required Government Warning statement—while keeping final judgment for a human reviewer.
 
-This prototype was created for a job application assessment. It is not intended for formal regulatory decisions, business operations, professional use, production deployment, or integration with the TTB COLA system.
+It is built using local Python tooling and a React frontend, the system demonstrates an offline, end-to-end workflow encompassing:
+
+* Image upload
+* Local OCR extraction
+* Rule-based compliance checks for brand, class/type, ABV, and government warnings
+* Batch processing capabilities
+* A manual review interface for final decisions
+
+Note: This Developed strictly for demonstration and internal review, the prototype is not intended for formal regulatory decisions, business operations, professional use, production deployment, or integration with the TTB COLA system. Known edge cases and technical limitations are documented in the project README.
 
 ## Repository structure
 
@@ -171,7 +179,7 @@ The best recorded EasyOCR run matched 19 of 20 synthetic fixtures, or 95% accura
 ## Known limitations
 
 - The environment uses CPU-only PyTorch (`2.13.0+cpu`); CUDA and an NVIDIA GPU were not available.
-- EasyOCR is accurate on the synthetic corpus but commonly takes about 5–8 seconds per image on this hardware.
+- EasyOCR is accurate on the synthetic corpus but commonly takes about 5–8 seconds per image on personal hardware.
 - Tesseract was tested as an alternative and was faster, but its synthetic accuracy was too low to be the primary engine.
 - The 1024-pixel image test reduced accuracy further; the working image limit remains 1280 pixels.
 - The dataset is synthetic and is not representative of all real label photographs.

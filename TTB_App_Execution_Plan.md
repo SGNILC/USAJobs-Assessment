@@ -41,7 +41,7 @@
 
 ## 3. Implementation Phase Breakdown (P1 – P5)
 
-### Phase 1: Environment Setup, Architecture & Schema Definition (P1)
+### Phase 1 (P1): Environment Setup, Architecture & Schema Definition 
 
 * **Repository structure**
 
@@ -106,7 +106,7 @@ ttb-label-verifier/
 
 ---
 
-### Phase 2: Offline Vision, Preprocessing & Compliance Rules Engine (P2)
+### Phase 2 (P2): Offline Vision, Preprocessing & Compliance Rules Engine 
 
 * **Image preprocessing**
   * Deskewing and rotation correction
@@ -123,7 +123,7 @@ ttb-label-verifier/
 
 ---
 
-### Phase 3: REST API Service & Asynchronous Batch Manager (P3) ✅ COMPLETE
+### Phase 3 (P3): REST API Service & Asynchronous Batch Manager  ✅ COMPLETE
 
 * **Endpoints implemented**
   * `POST /api/v1/verify`
@@ -141,7 +141,7 @@ ttb-label-verifier/
 
 ---
 
-### Phase 4: High-Accessibility React Web Interface (P4) ✅ COMPLETE
+### Phase 4 (P4): High-Accessibility React Web Interface ✅ COMPLETE
 
 * **Inspection view**
   * Manifest form and image upload
@@ -162,7 +162,7 @@ ttb-label-verifier/
 
 ---
 
-### Phase 5: Synthetic Test Generator, Benchmarking & Deployment (P5)
+### Phase 5 (P5): Synthetic Test Generator, Benchmarking & Deployment 
 
 * **Completed**
   * Synthetic dataset generation

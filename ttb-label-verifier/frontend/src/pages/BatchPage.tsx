@@ -44,7 +44,7 @@ export default function BatchPage() {
 
   async function handleZipFile(zipFile: File) {
     if (!zipFile.name.endsWith(".zip")) {
-      setError("Please upload a .zip archive.");
+      setError("Please upload a .zip archive file.");
       return;
     }
     setError(null);
@@ -93,6 +93,42 @@ export default function BatchPage() {
       <h1 className="mb-6 text-4xl font-black underline decoration-blue-700 decoration-4">
         Batch Queue Processing
       </h1>
+
+      {/* Step-by-Step Accessible Instructions */}
+      <section className="mb-8 rounded-3xl border-4 border-gray-900 bg-amber-50 p-8 shadow-xl text-black">
+        <h2 className="mb-6 text-3xl font-black text-black flex items-center gap-3 underline decoration-amber-500 decoration-4">
+          <span className="text-4xl">📋</span> How to Process a Batch File (3 Easy Steps)
+        </h2>
+
+        <ol className="flex flex-col gap-6 text-2xl font-extrabold text-gray-950">
+          <li className="flex items-start gap-4">
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gray-900 text-white font-black text-2xl shadow-md">
+              1
+            </span>
+            <div className="pt-1">
+              <strong className="text-black font-black">Prepare Your ZIP Folder:</strong> Make sure your folder contains your labels and your <code className="rounded-lg border-2 border-black bg-amber-200 px-2 py-1 text-2xl font-black">manifest.json</code> file, saved together in one <code className="rounded-lg border-2 border-black bg-amber-200 px-2 py-1 text-2xl font-black">.zip</code> file.
+            </div>
+          </li>
+
+          <li className="flex items-start gap-4">
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gray-900 text-white font-black text-2xl shadow-md">
+              2
+            </span>
+            <div className="pt-1">
+              <strong className="text-black font-black">Upload the File:</strong> Click the large blue <span className="text-blue-900 underline">"CHOOSE BATCH FILE (.ZIP)"</span> button below to select your file, or drag and drop your file into the dashed box.
+            </div>
+          </li>
+
+          <li className="flex items-start gap-4">
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gray-900 text-white font-black text-2xl shadow-md">
+              3
+            </span>
+            <div className="pt-1">
+              <strong className="text-black font-black">Export Your Results:</strong> Watch the progress bar fill up. When finished, click the black <span className="text-gray-900 underline">"📥 Export Summary to CSV"</span> button to download your results.
+            </div>
+          </li>
+        </ol>
+      </section>
 
       {/* Drag & Drop Upload Portal */}
       <div

@@ -24,7 +24,7 @@ export default function HomePage() {
           className="flex flex-col items-center justify-center rounded-3xl border-4 border-black bg-gray-900 p-8 shadow-xl hover:bg-black active:scale-95 text-white"
         >
           <span className="text-4xl font-black mb-2">📁 Batch Queue</span>
-          <span className="text-xl font-medium">Process up to 300 individual files in bulk (.ZIP) asynchronously</span>
+          <span className="text-xl font-medium">Process up to 300 labels in bulk asynchronously</span>
         </Link>
       </nav>
     </main>
