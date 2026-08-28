@@ -21,8 +21,12 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"], # add your local dev ports if needed
-    allow_origin_regex=r"https://.*\.vercel\.app",   
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "https://usa-jobs-assessment-vbw3-fpnqn9zpw-sgnilcs-projects.vercel.app"
+    ],
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
