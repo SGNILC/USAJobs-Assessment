@@ -18,5 +18,38 @@ web-build/
 .vscode/
 .idea/
 
+# Database files
+*.db
+*.sqlite
+*.sqlite3
 # Environment Variables & Secrets
+.env*.db
+*.sqlite
+*.sqlite3
+*.zip
+*.png
+*.jpg
+*.jpeg
+venv/
+__pycache__/
+.env
+*.db
+*.sqlite
+*.sqlite3
+*.zip
+*.png
+*.jpg
+*.jpeg
+venv/
+__pycache__/
+.env
+*.db
+*.sqlite
+*.sqlite3
+*.zip
+*.png
+*.jpg
+*.jpeg
+venv/
+__pycache__/
 .env
