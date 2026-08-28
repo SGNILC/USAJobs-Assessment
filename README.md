@@ -56,6 +56,7 @@ ttb-label-verifier/
 ## Current verification data contract
 
 The backend currently returns a minimal per-check object with a status, for example:
+![Project Screenshot](C:\USAJobs Project\Prototype Images\home.png)
 
 ```json
 {
