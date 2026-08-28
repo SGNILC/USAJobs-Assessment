@@ -1,0 +1,51 @@
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+ENV/
+**/.venv/
+**/venv/
+**/fresh_venv/
+
+# Node / frontend
+node_modules/
+dist/
+build/
+.vite/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local runtime data and generated artifacts
+*.log
+*.db
+*.sqlite3
+*.sqlite
+*.csv
+*.zip
+*.tmp
+*.bak
+*.orig
+benchmark*.json
+benchmark.json
+
+db/
+**/db/
+**/tmp/
+**/temp/
+**/uploads/
+
+# Editor / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

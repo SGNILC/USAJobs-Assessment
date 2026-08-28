@@ -1,18 +1,18 @@
 # Architecture & Execution Plan: AI-Powered Alcohol Label Verification App (TTB COLA Prototype)
 
 **Author:** Steeve Gandhi Nsangou  
-**Target Environment:** Standalone Prototype (Air-Gapped / Offline Compliant)  
+**Target Environment:** Standalone prototype with a Vercel frontend and Hugging Face backend  
 **Workspace File:** `TTB_App_Execution_Plan.md`
 
 ---
 
-# 📊 Overall Milestone Progress Tracker
+# Milestone Progress Tracker
 
-* ✅ Phase 1: Environment Setup, Directory Layout & Data Schema Definition
-* ✅ Phase 2: Offline Vision, Image Preprocessing & Rule Verification Engine
-* ✅ Phase 3: REST API Service & Asynchronous Batch Processing Manager
-* ✅ Phase 4: High-Accessibility React Web Interface (73-Yo Benchmark)
-* 🔄 Phase 5: Automated Benchmarking, Final Testing & Deployment (benchmarking complete; release work remaining)
+* ✅ Phase 1: Environment setup, directory layout, and schema definition
+* ✅ Phase 2: offline vision, image preprocessing, and rule verification engine
+* ✅ Phase 3: REST API service and asynchronous batch processing manager
+* ✅ Phase 4: high-accessibility React web interface
+* ✅ Phase 5: benchmarking, testing, deployment configuration, and release readiness review
 
 ---
 
@@ -20,56 +20,55 @@
 
 | Stakeholder / Persona | Operational Requirement | Architectural Implementation |
 | :--- | :--- | :--- |
-| **Sarah Chen (Business)** | Sub-5 second verification latency; intuitive interface for 73-year-old usability benchmark. | Streamlined single-page workflow, high-contrast visual cues, side-by-side verification, and local verification service. |
-| **Marcus Williams (IT Admin)** | Outbound firewall blocks cloud ML endpoints; standalone prototype (no COLA integration). | Entirely local OCR and validation stack using OpenCV + EasyOCR running in a Python backend. |
-| **Dave Morrison (Senior Agent)** | Human judgment handling; flexible matching for minor casing/punctuation variances. | Fuzzy string matching with explicit **NEEDS REVIEW** handling and manual approval/rejection controls. |
-| **Jenny Park (Junior Agent)** | Exact match for mandatory `GOVERNMENT WARNING:` text and glare/angle tolerance. | Strict regex/case check plus OpenCV preprocessing for deskewing, contrast enhancement, and lighting correction. |
-| **Janet (Seattle Office)** | Importers dumping 200–300 applications at once in peak season. | Asynchronous ZIP batch pipeline with job polling and CSV export. |
+| **Business stakeholder** | Fast, understandable review workflow and demonstration-ready prototype | Simplified UI, status badges, image preview, and consistent processing flow |
+| **IT / deployment support** | Static frontend with backend logic isolated from strict free-tier limits | Vercel-hosted frontend and Hugging Face-hosted FastAPI backend |
+| **Reviewing agent** | Human confirmation of uncertain or edge-case outcomes | Manual approval/rejection flow and queued review workflow |
+| **Compliance reviewer** | Rule enforcement for warning text, brand matching, ABV validation | Local OCR plus rule-based checks for key label compliance fields |
+| **Operations team** | Batch processing for multiple applications | ZIP upload workflow, async processing, status polling, CSV export |
 
 ---
 
 ## 2. Technology Stack & Skill Set Alignment
 
-* **Backend Framework:** Python 3.11+ with **FastAPI**.
-* **Computer Vision & OCR:** **OpenCV** + **EasyOCR**; offline-only execution.
-* **Data Processing & Matching:** **NumPy**, **RapidFuzz**.
-* **Frontend Application:** **React + TypeScript + Vite**.
-* **Database & Persistence:** **SQLite** for audit logging and batch status.
-* **Synthetic Data Generation:** Python script used to generate mock label artifacts.
+* **Backend framework:** Python with **FastAPI**
+* **Computer vision + OCR:** **OpenCV** + **EasyOCR**
+* **Data processing + matching:** **NumPy**, **RapidFuzz**
+* **Frontend application:** **React + TypeScript + Vite**
+* **Database + persistence:** **SQLite**
+* **Deployment model:** **Vercel** for frontend and **Hugging Face Spaces** for backend
+* **Synthetic data generation:** Python script for mock label images and manifests
 
 ---
 
-## 3. Implementation Phase Breakdown (P1 – P5)
+## 3. Implementation Phase Breakdown
 
-### Phase 1 (P1): Environment Setup, Architecture & Schema Definition 
+### Phase 1: Environment Setup, Architecture & Schema Definition
 
-* **Repository structure**
+**Repository structure**
 
 ```text
 ttb-label-verifier/
 ├── backend/
 │   ├── app/
-│   │   ├── core/         # OCR / preprocessing / batch processing
-│   │   ├── models/       # database helpers and persistence
-│   │   ├── rules/        # TTB check logic
-│   │   └── main.py       # FastAPI app
-│   ├── tests/            # validation and smoke testing
+│   │   ├── core/
+│   │   ├── models/
+│   │   ├── rules/
+│   │   └── main.py
+│   ├── tests/
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   └── utils/
-│   └── package.json
+│   ├── public/
+│   ├── package.json
+│   └── .env
 ├── sample_data/
+├── render.yaml
 ├── README.md
-├── README2.md
-├── Plann_0822.md
+├── TTB_App_Execution_Plan.md
 └── db/
 ```
 
-* **As-built input contract**
+**Input contract**
 
 ```json
 {
@@ -81,7 +80,7 @@ ttb-label-verifier/
 }
 ```
 
-* **Current verification output contract (actual backend schema)**
+**Current verification output contract**
 
 ```json
 {
@@ -102,90 +101,109 @@ ttb-label-verifier/
 }
 ```
 
-> Important: the current backend intentionally keeps the check objects minimal (`status` only). The richer `expected`, `extracted`, and `details` fields are optional UI-display metadata, not a required workflow contract.
+> The current backend intentionally keeps check objects minimal (`status` only). Richer metadata such as `expected`, `extracted`, and `details` is optional UI-display data rather than a required workflow contract.
 
 ---
 
-### Phase 2 (P2): Offline Vision, Preprocessing & Compliance Rules Engine 
+### Phase 2: Offline Vision, Preprocessing & Compliance Rules Engine
 
-* **Image preprocessing**
-  * Deskewing and rotation correction
-  * CLAHE-based contrast enhancement
-  * Adaptive thresholding for glare and low-contrast images
+**Image preprocessing**
+- deskewing and rotation correction
+- CLAHE-based contrast enhancement
+- adaptive thresholding for glare and low-contrast images
 
-* **OCR pipeline**
-  * Local EasyOCR extraction with OCR text lines returned to the rules engine
+**OCR pipeline**
+- local EasyOCR extraction
+- OCR text returned to the rules engine for structured validation
 
-* **Rule execution**
-  * Government warning presence and exact header enforcement
-  * Brand-name normalization and fuzzy mismatch handling
-  * ABV extraction and comparison logic
-
----
-
-### Phase 3 (P3): REST API Service & Asynchronous Batch Manager  ✅ COMPLETE
-
-* **Endpoints implemented**
-  * `POST /api/v1/verify`
-  * `POST /api/v1/verify/batch`
-  * `GET /api/v1/batch/{job_id}`
-  * `GET /api/v1/batch/{job_id}/export`
-  * `GET /health`
-  * `POST /api/v1/verify/{application_id}/decision`
-  * `GET /api/v1/verify/{application_id}/decision`
-
-* **Implementation notes**
-  * Batch processing is handled through `ThreadPoolExecutor` and tracked in SQLite.
-  * `backend/app/main.py` returns the current schema consumed by the frontend.
-  * `checker.py` was corrected to return `overall_status` plus `checks` entries with simple status values instead of a mismatched schema.
+**Rule execution**
+- Government Warning presence and header validation
+- brand-name normalization and fuzzy mismatch handling
+- ABV extraction and comparison logic
 
 ---
 
-### Phase 4 (P4): High-Accessibility React Web Interface ✅ COMPLETE
+### Phase 3: REST API Service & Asynchronous Batch Manager
 
-* **Inspection view**
-  * Manifest form and image upload
-  * Uploaded image preview and result checklist
-  * Agent approve/reject actions
-  * Latency display
+**Endpoints implemented**
+- `POST /api/v1/verify`
+- `POST /api/v1/verify/batch`
+- `GET /api/v1/batch/{job_id}`
+- `GET /api/v1/batch/{job_id}/export`
+- `GET /health`
+- `POST /api/v1/verify/{application_id}/decision`
+- `GET /api/v1/verify/{application_id}/decision`
 
-* **Batch dashboard**
-  * `.zip` upload flow
-  * Live status polling
-  * Summary results and CSV export
-
-* **Frontend contract note**
-  * The UI is built to render richer check details when they exist, but the core verification contract remains minimal.
-  * This means the frontend should either:
-    1. tolerate missing optional fields safely, or
-    2. receive those fields explicitly from the backend if richer explanations are required.
+**Implementation notes**
+- batch processing is handled asynchronously and tracked in SQLite
+- the app returns the schema consumed by the frontend
+- the rules engine and API contract intentionally remain minimal to avoid frontend breakage when optional details are absent
 
 ---
 
-### Phase 5 (P5): Synthetic Test Generator, Benchmarking & Deployment 
+### Phase 4: High-Accessibility React Web Interface
 
-* **Completed**
-  * Synthetic dataset generation
-  * Benchmark runs and quality checks
-  * Performance documentation and known limitation notes
+**Inspection view**
+- manifest form and image upload
+- uploaded image preview and result checklist
+- manual approve/reject decisions
+- latency display
 
-* **Current status**
-  * Prototype is functioning as a local verification tool.
-  * It is not a production-ready regulatory system and should not be treated as such.
+**Batch dashboard**
+- ZIP upload support
+- job-status polling
+- summary results and CSV export
+
+**Frontend contract note**
+- The UI is designed to render richer metadata when it is available, but it does not depend on it to function.
+- This keeps the system stable while still enabling future enhancements.
+
+---
+
+### Phase 5: Synthetic Benchmarking, Release Review & Deployment Model
+
+**Completed**
+- synthetic dataset generation
+- benchmark execution and recap
+- deployment architecture validation using Vercel and Hugging Face
+- documentation of known limitations and edge cases
+
+**Current deployment model**
+- **Frontend:** Vercel, static React app
+- **Backend:** Hugging Face Spaces, FastAPI service running the OCR and compliance logic
+- **API host:** direct app URL such as `https://sgnilc-ttb-label-verifier-backend.hf.space`
+- **Not to be used as the API target:** the public Hugging Face Spaces landing page URL, which is an HTML wrapper and not the live Uvicorn application
+
+**Current status**
+- The prototype is functioning as a demonstration and local validation tool.
+- It remains a proof-of-concept rather than a production or regulatory workflow.
 
 ---
 
-## 4. Overall Phase 5 Assessment
+## 4. Overall Assessment
 
-The project has achieved a working local prototype with an OCR-based verification engine, API layer, batch queue, and accessible frontend. The current system is operational for demonstration and local validation, but it remains a proof-of-concept and not a production or regulatory workflow.
-
-## 5. Open Architectural Questions
-
-1. **Do we want to enrich the backend result schema** with optional `expected`, `extracted`, and `details` fields for each check to support richer justification panels?
-2. **Should batch export remain CSV-only**, or would a more formal inspection-oriented export format be needed for downstream workflow handoff?
+The project has reached a working prototype state with an OCR-based verification engine, API layer, asynchronous batch workflow, and accessible frontend. The system is operational for demonstration and validation, but it should still be treated as a prototype rather than a production compliance platform.
 
 ---
+
+## 5. Future Work: Confidence Rating & Human Review Gating
+
+A strong next enhancement is a confidence rating for each verification result. This rating could combine:
+
+- OCR confidence
+- image quality signal
+- fuzzy match quality
+- rule certainty
+- exception severity
+
+This would allow the app to classify results into categories such as:
+
+- high confidence: auto-approve or auto-reject with minimal human intervention
+- medium confidence: route to human review
+- low confidence: require explicit human approval before final decisioning
+
+This would provide a clearer decision-support layer and help determine when further human approval is necessary.
 
 ## 6. Notable Implementation Reality Check
 
-The original planning spec described a richer response shape than the current implementation actually emits. The as-built system is intentionally conservative: it exposes the minimum data required for status + manual review and keeps any explanatory metadata optional. This is the correct design for a stable workflow contract and avoids frontend breakage when richer detail is absent.
+The original planning spec described a richer response shape than the current implementation emits. The as-built system is intentionally conservative: it exposes the minimum data needed for status + human review and leaves explanatory metadata as optional. This is a stable and safe design for the current prototype and avoids frontend breakage when additional detail is absent.

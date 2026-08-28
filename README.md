@@ -2,61 +2,93 @@
 
 ## Purpose
 
-This project is a standalone prototype for automating the review of alcohol beverage labels against application metadata. It performs comparisons—such as brand name, class/type, alcohol by volume (ABV), and the required Government Warning statement—while keeping final judgment for a human reviewer.
+This project is a standalone prototype for reviewing alcohol beverage labels against application metadata. It validates fields such as brand name, class/type, alcohol by volume (ABV), and the required Government Warning statement while leaving final judgment to a human reviewer.
 
-It is built using local Python tooling and a React frontend, the system demonstrates an offline, end-to-end workflow encompassing:
+The system demonstrates an end-to-end workflow that includes:
 
-* Image upload
-* Local OCR extraction
-* Rule-based compliance checks for brand, class/type, ABV, and government warnings
-* Batch processing capabilities
-* A manual review interface for final decisions
+- image upload
+- local OCR extraction
+- rule-based compliance checks
+- asynchronous batch processing
+- a manual review interface for final decisioning
 
-Note: This Developed strictly for demonstration and internal review, the prototype is not intended for formal regulatory decisions, business operations, professional use, production deployment, or integration with the TTB COLA system. Known edge cases and technical limitations are documented in the project README.
+This prototype was developed for demonstration, internal evaluation, and workflow exploration. It is not intended for formal regulatory decisions, production compliance use, or integration with the official TTB COLA system.
+
+## Architecture
+
+The current implementation uses a split deployment model:
+
+- Frontend: React + Vite app hosted on Vercel
+- Backend: FastAPI service hosted on Hugging Face Spaces
+- API communication: frontend fetch calls target the direct Hugging Face app URL rather than the public Hugging Face Spaces landing page
+
+This architecture was chosen to keep the frontend lightweight while offloading the OCR and compliance logic to a backend that can run the required Python stack without the strict memory limitations of a simple free-tier static hosting model.
+
+## Deployment configuration
+
+### Frontend (Vercel)
+
+The deployed frontend is available at:
+
+- https://usa-jobs-assessment-vbw3.vercel.app/
+
+The frontend reads the API base URL from environment variables, and the correct backend base should be:
+
+- https://sgnilc-ttb-label-verifier-backend.hf.space
+
+This is the direct application host. It is not the website URL shown in the Hugging Face Spaces UI wrapper.
+
+### Backend (Hugging Face)
+
+The backend is served by a FastAPI app running on a Hugging Face Space. The application exposes endpoints under `/api/v1/...` and supports CORS for the Vercel frontend origin.
+
+The direct backend host is:
+
+- https://sgnilc-ttb-label-verifier-backend.hf.space
+
+The workspace should not use the Hugging Face Spaces landing page URL (`https://huggingface.co/spaces/...`) as an API target. That page is not the running app server and will trigger HTML 404 responses and browser CORS blocks.
 
 ## Repository structure
 
 ```text
-ttb-label-verifier/
-├── backend/
-│   ├── app/
-│   │   ├── core/         # OCR, image preprocessing, batch processing
-│   │   ├── models/       # SQLite helpers and persistence
-│   │   ├── rules/        # TTB compliance logic
-│   │   └── main.py       # FastAPI endpoints
-│   ├── tests/            # validation and smoke tests
-│   └── requirements.txt
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── services/
-│   │   └── utils/
-│   └── package.json
-├── sample_data/
+.
+├── .gitignore
 ├── README.md
-├── README2.md
-├── Plann_0822.md
+├── TTB_App_Execution_Plan.md
+├── ttb-label-verifier/
+│   ├── backend/
+│   │   ├── app/
+│   │   │   ├── core/
+│   │   │   ├── models/
+│   │   │   ├── rules/
+│   │   │   └── main.py
+│   │   ├── requirements.txt
+│   │   └── tests/
+│   ├── frontend/
+│   │   ├── src/
+│   │   ├── package.json
+│   │   └── .env
+│   ├── sample_data/
+│   └── render.yaml
 ├── db/
-└── ttb-label-verifier/
+└── README - USAJobs Instructions.md
 ```
 
 ## What the application does
 
-- Accepts a manifest and one label image for individual verification
-- Uses local OpenCV preprocessing and offline EasyOCR
-- Checks Government Warning presence, casing, and required text
-- Compares brand name with normalization and fuzzy matching
-- Checks the declared ABV against OCR text on the label
-- Reports overall status, OCR text, latency, and manual-review recommendation
-- Accepts ZIP batches containing label images and a manifest
-- Tracks batch progress and provides CSV export
-- Allows an inspector to record an APPROVED or REJECTED manual decision
+- accepts a manifest and one label image for individual verification
+- uses local OpenCV preprocessing and offline EasyOCR
+- checks Government Warning presence, casing, and required text
+- compares brand name with normalization and fuzzy matching
+- checks declared ABV against OCR text on the label
+- reports overall status, OCR output, latency, and review recommendation
+- accepts ZIP batches containing label images and a manifest
+- tracks batch progress and provides CSV export
+- allows a reviewer to record APPROVED or REJECTED decisions
 
-## Current verification data contract
+## Current verification contract
 
 The backend currently returns a minimal per-check object with a status, for example:
-![Project Screenshot](C:\USAJobs Project\Prototype Images\home.png)
 
 ```json
 {
@@ -76,52 +108,57 @@ The backend currently returns a minimal per-check object with a status, for exam
 }
 ```
 
-This is the schema currently used by the app. Richer fields like `expected`, `extracted`, and `details` are optional UI metadata rather than a required backend contract. The frontend is written to render them when they exist, but it must safely tolerate missing values.
+This is the schema currently used by the app. Richer fields such as `expected`, `extracted`, and `details` are optional UI metadata rather than required backend contract. The frontend tolerates their absence without breaking the workflow.
 
 ## Technology
 
 - Backend: Python, FastAPI, OpenCV, EasyOCR, RapidFuzz, SQLite
 - Frontend: React, TypeScript, Vite, Tailwind CSS
-- OCR: Local EasyOCR; no cloud OCR API is required
+- Deployment: Vercel for frontend; Hugging Face Spaces for backend
+- OCR: local EasyOCR; no cloud OCR API is required
 
-## Run locally
+## Local run instructions
 
 ### Backend
 
-From the `ttb-label-verifier` directory:
+From the project directory:
 
 ```powershell
-cd backend
+cd ttb-label-verifier/backend
 .\venv\Scripts\Activate.ps1
 uvicorn app.main:app --reload
 ```
 
-The backend runs at `http://127.0.0.1:8000`.
+The backend runs at:
+
+- http://127.0.0.1:8000
 
 Useful endpoints:
 
-- `http://127.0.0.1:8000/health`
-- `http://127.0.0.1:8000/docs`
+- http://127.0.0.1:8000/health
+- http://127.0.0.1:8000/docs
 
 ### Frontend
 
 In a second terminal:
 
 ```powershell
-cd frontend
+cd ttb-label-verifier/frontend
 npm install
 npm run dev
 ```
 
-Open the Vite URL shown in the terminal, usually `http://localhost:5173`.
+Open the local Vite URL shown in the terminal, usually:
 
-The frontend API URL is configured in `frontend/.env`:
+- http://localhost:5173
+
+The frontend API URL is configured in `ttb-label-verifier/frontend/.env`:
 
 ```env
 VITE_API_BASE_URL=http://127.0.0.1:8000
 ```
 
-Restart Vite after changing this value.
+For the deployed Vercel app, the same pattern should point to the direct HF backend URL instead of the spaces landing page.
 
 ## Individual review workflow
 
@@ -130,9 +167,9 @@ Restart Vite after changing this value.
 3. Select a label image.
 4. Submit the verification.
 5. Review the status badge, checklist, and manual-review recommendation.
-6. Record an approval or rejection when human judgment is required.
+6. Record approval or rejection when human judgment is required.
 
-Use simple ABV values such as `45%` in the manifest field.
+Use simple values such as `45%` in the manifest field to keep verification cases straightforward.
 
 ## Batch workflow
 
@@ -145,7 +182,7 @@ COLA-2026-002.png
 ...
 ```
 
-Each manifest entry must contain application fields at the top level:
+Each manifest entry should contain the application fields at the top level:
 
 ```json
 {
@@ -157,12 +194,12 @@ Each manifest entry must contain application fields at the top level:
 }
 ```
 
-The image filename without its extension must match `application_id`. Upload the ZIP on the Batch Queue page, wait for completion, review the job summary, and export the CSV report.
+The image filename without its extension should match `application_id`. Upload the ZIP on the Batch Queue page, wait for processing to finish, review the summary output, and export the CSV report. If needed, use `ttb-label-verifier\sample_data\test1.zip` as a reference example.
 
 The synthetic fixtures can be regenerated from the repository root:
 
 ```powershell
-.\backend\venv\Scripts\python.exe sample_data\generate_mock_labels.py
+python sample_data\generate_mock_labels.py
 ```
 
 ## Benchmark
@@ -170,23 +207,31 @@ The synthetic fixtures can be regenerated from the repository root:
 Run the benchmark from the repository root:
 
 ```powershell
-.\backend\venv\Scripts\python.exe backend\benchmark_phase5.py --limit 20 --output backend\benchmark.json
+python backend\benchmark_phase5.py --limit 20 --output backend\benchmark.json
 ```
 
 The report includes fixture accuracy, per-image latency, preprocessing and OCR timing, and functional failures.
 
-The best recorded EasyOCR run matched 19 of 20 synthetic fixtures, or 95% accuracy. Mean latency was approximately 4.54 seconds on an otherwise idle laptop, although several individual images exceeded five seconds.
-
 ## Known limitations
 
-- The environment uses CPU-only PyTorch (`2.13.0+cpu`); CUDA and an NVIDIA GPU were not available.
-- EasyOCR is accurate on the synthetic corpus but commonly takes about 5–8 seconds per image on personal hardware.
-- Tesseract was tested as an alternative and was faster, but its synthetic accuracy was too low to be the primary engine.
-- The 1024-pixel image test reduced accuracy further; the working image limit remains 1280 pixels.
-- The dataset is synthetic and is not representative of all real label photographs.
-- The OCR confidence signal is not a guarantee of correctness.
-- GPU performance and sustained throughput for larger batches were not validated.
-- The prototype has no authentication, production retention policy, COLA integration, or formal regulatory approval.
+- the environment uses CPU-only PyTorch; CUDA and an NVIDIA GPU were not available
+- EasyOCR is accurate on the synthetic corpus but can take several seconds per image on personal hardware
+- Tesseract was tested as an alternative, but its synthetic accuracy was too low to be the primary engine
+- the dataset is synthetic and not representative of all real label photographs
+- OCR confidence is not a guarantee of correctness
+- the prototype does not include authentication, production retention, COLA integration, or formal regulatory approval
+
+## Future work
+
+The next logical enhancement is a confidence rating model that quantifies the reliability of each verification result. This rating could be based on OCR confidence, rule certainty, image quality signal, and a fuzzy-match quality score.
+
+The goal would be to estimate whether a result is:
+
+- high confidence: auto-approve or auto-reject without human review
+- medium confidence: require supervisor review
+- low confidence: escalate to human inspection before any decision
+
+This would provide a structured decision support layer to inform whether further human approval is necessary.
 
 ## Disclaimer
 
