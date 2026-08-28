@@ -236,3 +236,6 @@ This would provide a structured decision support layer to inform whether further
 ## Disclaimer
 
 This software was created solely as a job-application prototype and demonstration of engineering approach. It must not be used for formal regulatory review, business operations, professional services, production workloads, compliance determinations, or any decision affecting applicants or organizations. Results require human validation and should not be treated as authoritative.
+- ---
+
+*Built by Steeve G. Nsangou. AI tools (Chat GPT, Codex, Claude, Gemini, and MAI-Code) were used for assistance during development.*
